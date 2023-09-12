@@ -41,6 +41,7 @@ def delete(id):
         db.session.delete(task_to_delete)
         db.session.commit()
         return redirect('/')
+    # test
     except:
         return 'There was an error deleting your task'
     
