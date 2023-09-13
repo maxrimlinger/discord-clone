@@ -22,7 +22,7 @@ def index():
         return redirect('/')
     else:
         query = db.query(kind="message")
-        query.order = ["date_created"]
+        query.order = ["datetime_sent"]
         messages = list(query.fetch())
         return render_template('index.html', messages=messages)
     

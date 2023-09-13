@@ -6,7 +6,7 @@
 
 {% block body %}
 <div class="content">
-    <h1>Todo List</h1>
+    <h1>Chat</h1>
     {% if messages|length < 1 %}
     <h4>There are no messages. Create one below.</h4>
     {% else %}
@@ -20,7 +20,7 @@
         {% for message in messages %}
             <tr>
                 <td>{{ message.content }}</td>
-                <td>{{ message.date_created.date() }}</td>
+                <td>{{ message.datetime_sent.date() }}</td>
                 <td>
                     <a href="/delete/{{message.id}}">Delete</a>
                 </td>
