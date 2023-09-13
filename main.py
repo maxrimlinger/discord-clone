@@ -24,7 +24,6 @@ def index():
         query = db.query(kind="task")
         query.order = ["-date_created"]
         tasks = list(query.fetch())
-        print(tasks)
         return render_template('index.html', tasks=tasks)
     
 @app.route('/delete/<int:id>')

@@ -1,8 +1,18 @@
-body {
+* {
     margin: 0;
+    box-sizing: border-box;
+}
+body {
     font-family: sans-serif;
 }
+h1 {
+    text-align: center;
+}
+form {
+    text-align: center;
+}
 table, th, td{
+    margin: auto;
     border: 1px solid black;
     border-collapse: collapse;
 }

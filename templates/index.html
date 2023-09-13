@@ -15,7 +15,8 @@
         <tr>
             <th>Task</th>
             <th>Added</th>
-            <th>Actions</th>
+            <th>Delete</th>
+            <th>Update</th>
         </tr>
         {% for task in tasks %}
             <tr>
@@ -23,7 +24,8 @@
                 <td>{{ task.date_created.date() }}</td>
                 <td>
                     <a href="/delete/{{task.id}}">Delete</a>
-                    <br>
+                </td>
+                <td>
                     <a href="/update/{{task.id}}">Update</a>
                 </td>
             </tr>
@@ -35,4 +37,5 @@
         <input type="submit" value="Add Task">
     </form>
 </div>
+<script src="{{ url_for('static', filename='js/index_script.js') }}"></script>
 {% endblock %}
