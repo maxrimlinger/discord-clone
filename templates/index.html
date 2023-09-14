@@ -5,21 +5,17 @@
 {% endblock %}
 
 {% block body %}
+<div class="content">
     <h1>Chat</h1>
     {% if messages|length < 1 %}
     <h4>There are no messages. Create one below.</h4>
     {% else %}
 
     <table>
-        <tr>
-            <th>Message</th>
-            <th>Added</th>
-            <th>Delete</th>
-        </tr>
         {% for message in messages %}
-            <tr>
+            <tr class="message">
                 <td>{{ message.content }}</td>
-                <td>{{ message.datetime_sent.date() }}</td>
+                <td>{{ message.datetime_sent.strftime("%H:%M:%S") }}</td>
                 <td>
                     <a href="/delete/{{message.id}}">Delete</a>
                 </td>
@@ -31,5 +27,6 @@
         <input type="text" name="content" id="content">
         <input type="submit" value="Add Message">
     </form>
+</div>
 <script src="{{ url_for('static', filename='js/index_script.js') }}"></script>
 {% endblock %}

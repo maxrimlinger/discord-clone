@@ -16,7 +16,6 @@ def index():
                 "datetime_sent": datetime.utcnow(),
             }
         )
-        print(message)
         db.put(message)
     
         return redirect('/')
