@@ -23,10 +23,12 @@
         {% endfor %}
     </table>
     {% endif %}
+    <div class="form-container">
     <form action="/" method="POST">
         <input type="text" name="content" id="content">
         <input type="submit" value="Add Message">
     </form>
+    </div>
 </div>
 <script src="{{ url_for('static', filename='js/index_script.js') }}"></script>
 {% endblock %}
