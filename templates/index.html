@@ -13,11 +13,9 @@
 
     <table>
         {% for message in messages %}
-            <tr class="message">
-                <td>{{ message.content }}</td>
-                <td>{{ message.datetime_sent.strftime("%H:%M:%S") }}</td>
-                <td>
-                    <a href="/delete/{{message.id}}">Delete</a>
+            <tr>
+                <td class="message">
+                    <p class="message-content">{{ message.content }}</p><a href="/delete/{{message.id}}"><img src="{{ url_for('static', filename='svg/close_button_icon.svg') }}" class="delete-image"></a>
                 </td>
             </tr>
         {% endfor %}
@@ -25,8 +23,7 @@
     {% endif %}
     <div class="form-container">
     <form action="/" method="POST">
-        <input type="text" name="content" id="content">
-        <input type="submit" value="Add Message">
+        <input type="text" name="content" placeholder="Start typing..." id="textbox" tabindex="1"><input type="image" alt="Submit" value="Add Message" src="{{ url_for('static', filename='svg/send_button_icon.svg') }}" tabindex="2">
     </form>
     </div>
 </div>

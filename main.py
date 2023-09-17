@@ -9,6 +9,7 @@ db = datastore.Client()
 def index():
     if request.method == 'POST':
         message_content = request.form['content']
+        if message_content.isspace() or message_content == "": return redirect('/')
         message = datastore.Entity(db.key("message"))
         message.update(
             {
