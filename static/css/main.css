@@ -1,17 +1,51 @@
 * {
     margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 body {
     font-family: sans-serif;
     background-color: rgb(40, 40, 40);
 }
+.content {
+    max-width: 800px;
+    height: 100vh;
+    position: relative;
+    margin: auto;
+    overflow: hidden;
+    padding: 10px;
+}
 h1, h4 {
     text-align: center;
-    color: white;
+    color: #E6E6E6;
 }
 table {
-    color: white;
+    color: #E6E6E6;
+    width: 100%;
+}
+.message {
+    display: flex;
+    width: 100%;
+    border-radius: 7px;
+}
+.message:hover {
+    background-color: rgb(51, 51, 51);
+}
+.message:hover .delete-image {
+    display: inline;
+}
+.message-content {
+    padding: 5px;
+    flex-grow: 1;
+    overflow: hidden;
+    font-size: 1.5rem;
+}
+.delete-image {
+    display: none;
+    width: 1.5rem;
+    height: 100%;
+    margin-right: .3rem;
+    margin-left: .3rem;
 }
 .form-container {
     width: 100%;
@@ -22,18 +56,21 @@ table {
 }
 form {
     width: 100%;
-    padding: 10px;
-    border: 2px rgb(0, 0, 0) solid;
-    border-radius: 20px;
-    background-color: gray;
+    padding: 7px;
+    padding-left: 10px;
+    border-radius: 26px;
+    background-color: rgb(73, 73, 73);
+    display: flex;
+    gap: 5px;
 }
-.message {
+input[type=text] {
+    flex-grow: 1;
+    background: transparent;
+    color: #E6E6E6;
+    border: 0;
+    font-size: 2rem;
 }
-.content {
-    max-width: 800px;
-    height: 100vh;
-    position: relative;
-    margin: auto;
-    overflow: hidden;
-    padding: 10px;
+input[type=image] {
+    width: 2rem;
+    vertical-align: middle;
 }
