@@ -14,7 +14,7 @@
     <table>
         {% for message in messages %}
             <tr>
-                <td class="message">
+                <td class="message" title="{{message.datetime_sent}}">
                     <p class="message-content">{{ message.content }}</p><a href="/delete/{{message.id}}"><img src="{{ url_for('static', filename='svg/close_button_icon.svg') }}" class="delete-image"></a>
                 </td>
             </tr>
