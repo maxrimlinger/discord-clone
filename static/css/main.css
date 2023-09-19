@@ -35,14 +35,14 @@ table {
     display: inline;
 }
 .message-content {
-    padding: 5px;
+    padding: 3px 6px;
     flex-grow: 1;
     overflow: hidden;
     font-size: 1.5rem;
 }
 .delete-image {
     display: none;
-    width: 1.5rem;
+    width: 1.2rem;
     height: 100%;
     margin-right: .3rem;
     margin-left: .3rem;
