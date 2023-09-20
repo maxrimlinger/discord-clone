@@ -18,23 +18,24 @@ def get_relational_datetime(dt_message):
     dt_2_minutes_ago = now - timedelta(minutes=2)
     dt_1_hour_ago = now - timedelta(hours=1)
     dt_2_hours_ago = now - timedelta(hours=2)
-    dt_beginning_of_today = datetime.combine(date.today(), datetime.min.time())
-    dt_beginning_of_yesterday = datetime.combine(date.today() - timedelta(days=1), datetime.min.time())
+    dt_beginning_of_today = datetime.combine(date.today(), datetime.min.time(), tzinfo=timezone.utc)
+    date_yesterday = date.today() - timedelta(days=1)
+    dt_beginning_of_yesterday = datetime.combine(date_yesterday, datetime.min.time(), tzinfo=timezone.utc)
 
     if dt_message > dt_1_minute_ago:
-        return "Now"
+        return "Now" + str(dt_message)
     elif dt_message > dt_2_minutes_ago:
-        return "1 minute ago"
+        return "1 minute ago" + str(dt_message)
     elif dt_message > dt_1_hour_ago:
-        return str(td_since_message.seconds // 60) + " minutes ago"
+        return str(td_since_message.seconds // 60) + " minutes ago" + str(dt_message)
     elif dt_message > dt_2_hours_ago:
-        return "1 hour ago"
+        return "1 hour ago" + str(dt_message)
     elif dt_message > dt_beginning_of_today:
-        return str(td_since_message.seconds // 3600) + "hours ago"
+        return str(td_since_message.seconds // 3600) + "hours ago" + str(dt_message)
     elif dt_message > dt_beginning_of_yesterday:
-        return "Yesterday" # wack (maybe switch to discord method)
+        return "Yesterday"  + str(dt_message) # wack (maybe switch to discord method)
     else:
-        return "old"
+        return "old" + str(dt_message)
 
 @app.route('/', methods=['POST', 'GET'])
 def index():

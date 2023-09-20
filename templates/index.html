@@ -10,8 +10,8 @@
     {% if messages|length < 1 %}
     <h4>There are no messages. Create one below.</h4>
     {% else %}
-
-    <table>
+    <div class="message-table-container">
+    <table class="message-table">
         {% for message in messages %}
             <tr>
                 <td class="message" title="{{message.datetime_sent}}">
@@ -20,6 +20,7 @@
             </tr>
         {% endfor %}
     </table>
+    </div>
     {% endif %}
     <div class="form-container">
     <form action="/" method="POST">
