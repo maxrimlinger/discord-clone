@@ -1,7 +1,7 @@
 :root {
     --form-container-padding: 10px;
     --form-padding: 7px;
-    --input-font-size: 2rem;
+    --input-font-size: 1.5rem;
 }
 * {
     margin: 0;
@@ -28,11 +28,6 @@ h1, h4 {
 .message-table-container  {
     overflow: auto;
     flex-grow: 1;
-}
-.message-table-container::after {
-    content: " ";
-    display: block;
-    height: calc(2 * var(--form-container-padding) + var(--input-font-size) + 2 * var(--form-padding));
 }
 .message-table {
     color: #E6E6E6;
@@ -64,9 +59,6 @@ h1, h4 {
 }
 .form-container {
     width: 100%;
-    position: absolute;
-    bottom: 0;
-    left: 0;
     padding: var(--form-container-padding);
 }
 form {
@@ -85,9 +77,9 @@ input[type=text] {
     border: 0;
     font-size: var(--input-font-size);
     line-height: var(--input-font-size);
-    height: 2rem;
+    height: var(--input-font-size);
 }
 input[type=image] {
-    width: 2rem;
+    width: var(--input-font-size);
     vertical-align: middle;
 }
