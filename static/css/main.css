@@ -1,3 +1,8 @@
+:root {
+    --form-container-padding: 10px;
+    --form-padding: 7px;
+    --input-font-size: 2rem;
+}
 * {
     margin: 0;
     padding: 0;
@@ -12,8 +17,7 @@ body {
     height: 100vh;
     position: relative;
     margin: auto;
-    padding: 10px 0;
-    background-color: bisque;
+    padding: 10px 0 0 0;
     display: flex;
     flex-direction: column;
 }
@@ -25,8 +29,12 @@ h1, h4 {
     overflow: auto;
     flex-grow: 1;
 }
+.message-table-container::after {
+    content: " ";
+    display: block;
+    height: calc(2 * var(--form-container-padding) + var(--input-font-size) + 2 * var(--form-padding));
+}
 .message-table {
-    background-color: green;
     color: #E6E6E6;
     width: 100%;
 }
@@ -39,7 +47,7 @@ h1, h4 {
     background-color: rgb(51, 51, 51);
 }
 .message:hover .delete-image {
-    display: inline;
+    opacity: 1;
 }
 .message-content {
     padding: 3px 6px;
@@ -48,7 +56,7 @@ h1, h4 {
     font-size: 1.5rem;
 }
 .delete-image {
-    display: none;
+    opacity: 0;
     width: 1.2rem;
     height: 100%;
     margin-right: .3rem;
@@ -59,12 +67,12 @@ h1, h4 {
     position: absolute;
     bottom: 0;
     left: 0;
-    padding: 10px;
+    padding: var(--form-container-padding);
 }
 form {
     width: 100%;
-    padding: 7px;
-    padding-left: 10px;
+    padding: var(--form-padding);
+    padding-left: calc(var(--form-padding) * 1.3);
     border-radius: 26px;
     background-color: rgb(73, 73, 73);
     display: flex;
@@ -75,7 +83,9 @@ input[type=text] {
     background: transparent;
     color: #E6E6E6;
     border: 0;
-    font-size: 2rem;
+    font-size: var(--input-font-size);
+    line-height: var(--input-font-size);
+    height: 2rem;
 }
 input[type=image] {
     width: 2rem;

@@ -1,6 +1,7 @@
 from flask import Flask, render_template, url_for, request, redirect
 from google.cloud import datastore
 from datetime import datetime, timezone, timedelta, date
+from zoneinfo import ZoneInfo
 
 app = Flask(__name__)
 db = datastore.Client()
@@ -22,6 +23,8 @@ def get_relational_datetime(dt_message):
     date_yesterday = date.today() - timedelta(days=1)
     dt_beginning_of_yesterday = datetime.combine(date_yesterday, datetime.min.time(), tzinfo=timezone.utc)
 
+    # TODO time is only shown in UTC
+    # tzinfo=ZoneInfo("America/Los_Angeles")
     if dt_message > dt_1_minute_ago:
         return "Now" + str(dt_message)
     elif dt_message > dt_2_minutes_ago:
@@ -31,7 +34,7 @@ def get_relational_datetime(dt_message):
     elif dt_message > dt_2_hours_ago:
         return "1 hour ago" + str(dt_message)
     elif dt_message > dt_beginning_of_today:
-        return str(td_since_message.seconds // 3600) + "hours ago" + str(dt_message)
+        return str(td_since_message.seconds // 3600) + " hours ago" + str(dt_message)
     elif dt_message > dt_beginning_of_yesterday:
         return "Yesterday"  + str(dt_message) # wack (maybe switch to discord method)
     else:
