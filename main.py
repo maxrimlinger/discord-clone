@@ -67,6 +67,7 @@ def index():
     
         return redirect("/")
     else:
+        # test
         query = db.query(kind="message")
         query.order = ["datetime_sent"]
         messages = list(query.fetch())
