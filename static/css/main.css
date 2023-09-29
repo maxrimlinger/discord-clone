@@ -13,7 +13,16 @@ body {
     background-color: rgb(40, 40, 40);
 }
 .content {
-    max-width: 800px;
+    display: grid; /* TODO don't do it this way */
+    grid-template-columns: 20% 80%;
+}
+.channel-pane { 
+    border: solid beige 1px;
+    width: 100%;
+}
+.chat-pane {
+    width: 100%;
+    border: solid lime 1px;
     height: 100vh;
     position: relative;
     margin: auto;
