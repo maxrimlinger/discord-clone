@@ -10,29 +10,31 @@
 }
 body {
     font-family: sans-serif;
-    background-color: rgb(40, 40, 40);
 }
 .content {
-    display: grid; /* TODO don't do it this way */
-    grid-template-columns: 20% 80%;
+    display: flex;
 }
 .channel-pane { 
-    border: solid beige 1px;
-    width: 100%;
+    background-color: rgb(40, 40, 40);
+    width: 14rem;
+    color: white;
+    font-size: 1.5rem;
 }
 .chat-pane {
-    width: 100%;
-    border: solid lime 1px;
+    flex-grow: 1;
+    background-color: rgb(50, 50, 50);
     height: 100vh;
     position: relative;
-    margin: auto;
-    padding: 10px 0 0 0;
+    padding: 8px 0 0 0; /* TODO make this a var */
     display: flex;
     flex-direction: column;
 }
 h1, h4 {
     text-align: center;
     color: #E6E6E6;
+}
+h1 {
+    font-size: 2rem;
 }
 .message-table-container  {
     overflow: auto;
