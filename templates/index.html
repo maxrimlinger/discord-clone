@@ -1,40 +1,53 @@
-{% extends 'base.html' %}
-
-{% block head %}
+{% extends 'base.html' %} {% block head %}
 <title>booyah</title>
-{% endblock %}
-
-{% block body %}
+{% endblock %} {% block body %}
 <div class="content">
-<div class="channel-pane">
+  <div class="channel-pane">
     <h1>Channels</h1>
-    <ul>
-        <li>Channel Name</li>
-    </ul>
-</div>
-<div class="chat-pane">
-    <nav><h1>Chat Name</h1></nav>
+    <div class="list-container">
+      <ul class="list">
+        <li class="item item-content">Channel Name 1</li>
+        <li class="item item-content">Channel Name 2</li>
+        <li class="item item-content">Channel Name 3WWWWWWWW</li>
+      </ul>
+    </div>
+  </div>
+  <div class="chat-pane">
+    <nav><h1>Channel Name</h1></nav>
     {% if messages|length < 1 %}
-    <h4>There are no messages. Create one below.</h4>
+    <h4>There are no messages.</h4>
     {% else %}
-    <div class="message-table-container">
-    <table class="message-table">
+    <div class="list-container" id="chat-list-container">
+      <ul class="list">
         {% for message in messages %}
-            <tr>
-                <td class="message" title="{{message.datetime_sent}}">
-                    <p class="message-content">{{ message.content }}</p><a href="/delete/{{message.id}}"><img src="{{ url_for('static', filename='svg/close_button_icon.svg') }}" class="delete-image"></a>
-                </td>
-            </tr>
+        <li class="message item" title="{{message.datetime_sent}}">
+          <p class="message-content item-content">{{ message.content }}</p>
+          <a href="/delete/{{message.id}}"
+            ><img
+              src="{{ url_for('static', filename='svg/close_button_icon.svg') }}"
+              class="delete-image"
+          /></a>
+        </li>
         {% endfor %}
-    </table>
+      </ul>
     </div>
     {% endif %}
     <div class="form-container">
-    <form action="/" method="POST">
-        <input type="text" name="content" placeholder="Start typing..." id="textbox" tabindex="1"><input type="image" alt="Submit" value="Add Message" src="{{ url_for('static', filename='svg/send_button_icon.svg') }}" tabindex="2">
-    </form>
+      <form action="/" method="POST">
+        <input
+          type="text"
+          name="content"
+          placeholder="Start typing..."
+          id="textbox"
+        /><input
+          type="image"
+          alt="Submit"
+          value="Add Message"
+          src="{{ url_for('static', filename='svg/send_button_icon.svg') }}"
+        />
+      </form>
     </div>
-</div>
+  </div>
 </div>
 <script src="{{ url_for('static', filename='js/index_script.js') }}"></script>
 {% endblock %}

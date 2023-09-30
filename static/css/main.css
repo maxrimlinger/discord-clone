@@ -17,7 +17,7 @@ body {
 .channel-pane { 
     background-color: rgb(40, 40, 40);
     width: 14rem;
-    color: white;
+    color: #E6E6E6;
     font-size: 1.5rem;
 }
 .chat-pane {
@@ -25,41 +25,49 @@ body {
     background-color: rgb(50, 50, 50);
     height: 100vh;
     position: relative;
-    padding: 8px 0 0 0; /* TODO make this a var */
     display: flex;
     flex-direction: column;
 }
 h1, h4 {
+    padding: 8px 0 0 0;
     text-align: center;
     color: #E6E6E6;
 }
 h1 {
     font-size: 2rem;
 }
-.message-table-container  {
+.list-container  {
     overflow: auto;
     flex-grow: 1;
+    padding: 0 8px;
 }
-.message-table {
+.list {
     color: #E6E6E6;
     width: 100%;
 }
-.message {
-    display: flex;
-    width: 100%;
+.item {
     border-radius: 7px;
 }
-.message:hover {
-    background-color: rgb(51, 51, 51);
+.message {
+    display: flex;
+}
+.item:hover {
+    background-color: rgb(73, 73, 73);
 }
 .message:hover .delete-image {
     opacity: 1;
 }
-.message-content {
+.item-content {
     padding: 3px 6px;
-    flex-grow: 1;
     overflow: hidden;
     font-size: 1.5rem;
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.message-content {
+    flex-grow: 1;
 }
 .delete-image {
     opacity: 0;

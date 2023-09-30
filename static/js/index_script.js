@@ -1,4 +1,2 @@
-var element = document.getElementsByClassName("message-table-container").item(0);
+var element = document.getElementById("chat-list-container");
 element.scrollTop = element.scrollHeight;
-
-console.log(Intl.DateTimeFormat().resolvedOptions().timeZone)

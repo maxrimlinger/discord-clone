@@ -11,9 +11,10 @@ class Message():
     converting the date and time the message was sent to a more readible format
     for the frontend.
     """
-    def __init__(self, content, datetime_sent):
+    def __init__(self, content, datetime_sent, message_id):
         self.content = content
         self.datetime_sent = get_relational_datetime(datetime_sent)
+        self.id = message_id
 
 def get_relational_datetime(dt_message):
     now = datetime.now(timezone.utc)
@@ -72,7 +73,9 @@ def index():
         messages = list(query.fetch())
         formatted_messages = []
         for message in messages:
-            formatted_message = Message(message["content"], message["datetime_sent"])
+            formatted_message = Message(message["content"], 
+                                        message["datetime_sent"], 
+                                        message.id)
             formatted_messages.append(formatted_message)
         return render_template("index.html", messages=formatted_messages)
     
