@@ -1,104 +1,128 @@
 :root {
-    --form-container-padding: 10px;
-    --form-padding: 7px;
-    --input-font-size: 1.5rem;
+  --form-container-padding: 10px;
+  --form-padding: 7px;
+  --input-font-size: 1.5rem;
 }
+
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
+
 body {
-    font-family: sans-serif;
+  font-family: sans-serif;
 }
-.content {
-    display: flex;
+
+#content {
+  display: grid;
+  grid-template-columns: 240px 2px 1fr;
 }
-.channel-pane { 
-    background-color: rgb(40, 40, 40);
-    width: 14rem;
-    color: #E6E6E6;
-    font-size: 1.5rem;
+
+.channel-pane {
+  background-color: rgb(40, 40, 40);
+  color: #e6e6e6;
+  font-size: 1.5rem;
 }
+
+#pane-divider {
+  background-color: rgb(24, 24, 24);
+  cursor: ew-resize;
+}
+
 .chat-pane {
-    flex-grow: 1;
-    background-color: rgb(50, 50, 50);
-    height: 100vh;
-    position: relative;
-    display: flex;
-    flex-direction: column;
+  background-color: rgb(50, 50, 50);
+  height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
 }
-h1, h4 {
-    padding: 8px 0 0 0;
-    text-align: center;
-    color: #E6E6E6;
+
+h1,
+h4 {
+  padding: 8px 0 0 8px;
+  color: #e6e6e6;
 }
+
 h1 {
-    font-size: 2rem;
+  font-size: 2rem;
 }
-.list-container  {
-    overflow: auto;
-    flex-grow: 1;
-    padding: 0 8px;
+
+.list-container {
+  overflow: auto;
+  flex-grow: 1;
+  padding: 0 8px;
 }
+
 .list {
-    color: #E6E6E6;
-    width: 100%;
+  color: #e6e6e6;
+  width: 100%;
 }
+
 .item {
-    border-radius: 7px;
+  border-radius: 7px;
 }
+
 .message {
-    display: flex;
+  display: flex;
 }
+
 .item:hover {
-    background-color: rgb(73, 73, 73);
+  background-color: rgb(73, 73, 73);
 }
+
 .message:hover .delete-image {
-    opacity: 1;
+  opacity: 1;
 }
+
 .item-content {
-    padding: 3px 6px;
-    overflow: hidden;
-    font-size: 1.5rem;
-    max-width: 100%;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+  padding: 3px 6px;
+  overflow: hidden;
+  font-size: 1.5rem;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
+
 .message-content {
-    flex-grow: 1;
+  flex-grow: 1;
 }
+
 .delete-image {
-    opacity: 0;
-    width: 1.2rem;
-    height: 100%;
-    margin-right: .3rem;
-    margin-left: .3rem;
+  opacity: 0;
+  width: 1.2rem;
+  height: 100%;
+  margin-right: 0.3rem;
+  margin-left: 0.3rem;
 }
+
 .form-container {
-    width: 100%;
-    padding: var(--form-container-padding);
+  width: 100%;
+  padding: var(--form-container-padding);
 }
+
 form {
-    width: 100%;
-    padding: var(--form-padding);
-    padding-left: calc(var(--form-padding) * 1.3);
-    border-radius: 26px;
-    background-color: rgb(73, 73, 73);
-    display: flex;
-    gap: 5px;
+  width: 100%;
+  padding: var(--form-padding);
+  padding-left: calc(var(--form-padding) * 1.3);
+  border-radius: 26px;
+  background-color: rgb(73, 73, 73);
+  display: flex;
+  gap: 5px;
 }
-input[type=text] {
-    flex-grow: 1;
-    background: transparent;
-    color: #E6E6E6;
-    border: 0;
-    font-size: var(--input-font-size);
-    line-height: var(--input-font-size);
-    height: var(--input-font-size);
+
+input[type="text"] {
+  flex-grow: 1;
+  background: transparent;
+  color: #e6e6e6;
+  border: 0;
+  font-size: var(--input-font-size);
+  line-height: var(--input-font-size);
+  height: var(--input-font-size);
 }
-input[type=image] {
-    width: var(--input-font-size);
-    vertical-align: middle;
+
+input[type="image"] {
+  width: var(--input-font-size);
+  vertical-align: middle;
 }

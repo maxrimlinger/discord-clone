@@ -1,7 +1,7 @@
 {% extends 'base.html' %} {% block head %}
 <title>booyah</title>
 {% endblock %} {% block body %}
-<div class="content">
+<div id="content">
   <div class="channel-pane">
     <h1>Channels</h1>
     <div class="list-container">
@@ -12,6 +12,7 @@
       </ul>
     </div>
   </div>
+  <div id="pane-divider"></div>
   <div class="chat-pane">
     <nav><h1>Channel Name</h1></nav>
     {% if messages|length < 1 %}
