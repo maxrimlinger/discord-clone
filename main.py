@@ -11,7 +11,8 @@ class Message():
     converting the date and time the message was sent to a more readible format
     for the frontend.
     """
-    def __init__(self, content, datetime_sent, message_id):
+    def __init__(self, channel, content, datetime_sent, message_id):
+        self.channel = channel
         self.content = content
         self.datetime_sent = get_relational_datetime(datetime_sent)
         self.id = message_id
@@ -52,14 +53,16 @@ def get_relational_datetime(dt_message):
     else:
         return str(days_since_message.days) + " days ago"
 
-@app.route("/", methods=["POST", "GET"])
-def index():
+@app.route("/<channel>", methods=["POST", "GET"])
+def index(channel):
     if request.method == "POST":
+        print(request.form)
         message_content = request.form["content"]
         if message_content.isspace() or message_content == "": return redirect("/")
         message = datastore.Entity(db.key("message"))
         message.update(
             {
+                "channel": channel,
                 "content": message_content,
                 "datetime_sent": datetime.now(timezone.utc),
             }
@@ -73,11 +76,15 @@ def index():
         messages = list(query.fetch())
         formatted_messages = []
         for message in messages:
-            formatted_message = Message(message["content"], 
+            formatted_message = Message(channel,
+                                        message["content"], 
                                         message["datetime_sent"], 
                                         message.id)
             formatted_messages.append(formatted_message)
-        return render_template("index.html", messages=formatted_messages)
+        # TODO query only messages in a channel
+        # TODO query a list of channels to display on the left pane
+        # TODO make the route "/" redirect to the first channel in the queried list of channels
+        return render_template("index.html", channel=channel, messages=formatted_messages)
     
 @app.route("/delete/<int:id>")
 def delete(id):

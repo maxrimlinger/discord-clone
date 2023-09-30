@@ -10,13 +10,11 @@ function m_move_divider(e) {
 function m_down_divider(e) {
     e.preventDefault();
     document.addEventListener("mousemove", m_move_divider, true);
-    console.log("down");
 }
 
 function m_up_divider(e) {
     e.preventDefault();
     document.removeEventListener("mousemove", m_move_divider, true);
-    console.log("up");
 }
 
 const divider = document.getElementById("pane-divider");

@@ -22,7 +22,7 @@
       <ul class="list">
         {% for message in messages %}
         <li class="message item" title="{{message.datetime_sent}}">
-          <p class="message-content item-content">{{ message.content }}</p>
+          <p class="message-content item-content">{{ message.content }} {{ message.channel }}</p>
           <a href="/delete/{{message.id}}"
             ><img
               src="{{ url_for('static', filename='svg/close_button_icon.svg') }}"
