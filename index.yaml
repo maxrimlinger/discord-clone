@@ -1,0 +1,6 @@
+indexes:
+
+- kind: message
+  properties:
+  - name: channel
+  - name: datetime_sent

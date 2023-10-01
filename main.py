@@ -53,12 +53,19 @@ def get_relational_datetime(dt_message):
     else:
         return str(days_since_message.days) + " days ago"
 
-@app.route("/<channel>", methods=["POST", "GET"])
-def index(channel):
+@app.route("/")
+def index():
+    return redirect("/channel/no_channel") # TODO redirect to "first" channel
+
+@app.route("/channel/")
+def channel_index():
+    return redirect("/channel/no_channel") # TODO redirect to "first" channel
+
+@app.route("/channel/<channel>/", methods=["POST", "GET"])
+def channel(channel):
     if request.method == "POST":
-        print(request.form)
         message_content = request.form["content"]
-        if message_content.isspace() or message_content == "": return redirect("/")
+        if message_content.isspace() or message_content == "": return redirect("/" + channel)
         message = datastore.Entity(db.key("message"))
         message.update(
             {
@@ -69,27 +76,52 @@ def index(channel):
         )
         db.put(message)
     
-        return redirect("/")
+        return redirect("/" + channel)
     else:
-        query = db.query(kind="message")
-        query.order = ["datetime_sent"]
-        messages = list(query.fetch())
+        message_query = db.query(kind="message")
+        message_query.add_filter("channel", "=", channel)
+        message_query.order = ["datetime_sent"]
+        messages = list(message_query.fetch())
         formatted_messages = []
         for message in messages:
-            formatted_message = Message(channel,
+            formatted_message = Message(message["channel"],
                                         message["content"], 
                                         message["datetime_sent"], 
                                         message.id)
             formatted_messages.append(formatted_message)
-        # TODO query only messages in a channel
         # TODO query a list of channels to display on the left pane
-        # TODO make the route "/" redirect to the first channel in the queried list of channels
-        return render_template("index.html", channel=channel, messages=formatted_messages)
+        channel_query = db.query(kind="channel")
+        channel_query.order = ["name"]
+        channels = list(channel_query.fetch())
+        print(channels)
+        return render_template("index.html", channel=channel, channels=channels, messages=formatted_messages)
+
+@app.route("/add-channel", methods=["POST", "GET"])
+def add_channel():
+    if request.method == "POST":
+        channel_name = request.form["channel-name"]
+        channel = datastore.Entity(db.key("channel"))
+        channel.update(
+            {
+                "name": channel_name,
+                "creation_date": datetime.now(timezone.utc),
+            }
+        )
+        db.put(channel)
+
+        return redirect("/")
+    else:
+        return redirect("/")
     
-@app.route("/delete/<int:id>")
-def delete(id):
+@app.route("/delete-message/<int:id>")
+def delete_message(id):
     db.delete(db.key("message", id))
     return redirect("/")
+
+# @app.route("/delete-channel/<channel>") TODO figure out how to delete channel
+# def delete_channel(channel):
+#     db.delete(db.key("channel", channel)) 
+#     return redirect("/")
 
 if __name__ == "__main__":
     app.run(debug=True, port=8080)

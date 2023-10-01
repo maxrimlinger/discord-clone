@@ -6,10 +6,20 @@
     <h1>Channels</h1>
     <div class="list-container">
       <ul class="list">
-        <li class="item item-content">Channel Name 1</li>
-        <li class="item item-content">Channel Name 2</li>
-        <li class="item item-content">Channel Name 3WWWWWWWW</li>
+        {% if channels|length < 1 %}
+        <li>No Channels</li>
+        {% else %}
+        {% for channel in channels %}
+        <li class="item item-content">{{ channel.name }}</li>
+        {% endfor %}
+        {% endif %}
       </ul>
+      <form action="/add-channel" method="POST">
+        <input type="text" name="channel-name"/><input
+          type="submit"
+          value="Add Channel"
+        />
+      </form>
     </div>
   </div>
   <div id="pane-divider"></div>
@@ -22,8 +32,10 @@
       <ul class="list">
         {% for message in messages %}
         <li class="message item" title="{{message.datetime_sent}}">
-          <p class="message-content item-content">{{ message.content }} {{ message.channel }}</p>
-          <a href="/delete/{{message.id}}"
+          <p class="message-content item-content">
+            {{ message.content }} {{ message.channel }}
+          </p>
+          <a href="/delete-message/{{message.id}}"
             ><img
               src="{{ url_for('static', filename='svg/close_button_icon.svg') }}"
               class="delete-image"
@@ -34,7 +46,7 @@
     </div>
     {% endif %}
     <div class="form-container">
-      <form action="/" method="POST">
+      <form action="/{{ channel }}" method="POST">
         <input
           type="text"
           name="content"

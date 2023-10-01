@@ -112,7 +112,7 @@ form {
   gap: 5px;
 }
 
-input[type="text"] {
+#textbox {
   flex-grow: 1;
   background: transparent;
   color: #e6e6e6;
