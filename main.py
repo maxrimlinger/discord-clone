@@ -65,7 +65,7 @@ def channel_index():
 def channel(channel):
     if request.method == "POST":
         message_content = request.form["content"]
-        if message_content.isspace() or message_content == "": return redirect("/" + channel)
+        if message_content.isspace() or message_content == "": return redirect("/channel/" + channel)
         message = datastore.Entity(db.key("message"))
         message.update(
             {
@@ -76,7 +76,7 @@ def channel(channel):
         )
         db.put(message)
     
-        return redirect("/" + channel)
+        return redirect("/channel/" + channel)
     else:
         message_query = db.query(kind="message")
         message_query.add_filter("channel", "=", channel)
@@ -93,14 +93,16 @@ def channel(channel):
         channel_query = db.query(kind="channel")
         channel_query.order = ["name"]
         channels = list(channel_query.fetch())
-        print(channels)
+        for channel in channels:
+            print(channel.key)
+            print(channel["creation_date"])
         return render_template("index.html", channel=channel, channels=channels, messages=formatted_messages)
 
 @app.route("/add-channel", methods=["POST", "GET"])
-def add_channel():
+def add_channel(): # TODO currently doesn't check if channel name already exists, just overwrites
     if request.method == "POST":
         channel_name = request.form["channel-name"]
-        channel = datastore.Entity(db.key("channel"))
+        channel = datastore.Entity(db.key("channel", channel_name))
         channel.update(
             {
                 "name": channel_name,
@@ -118,10 +120,10 @@ def delete_message(id):
     db.delete(db.key("message", id))
     return redirect("/")
 
-# @app.route("/delete-channel/<channel>") TODO figure out how to delete channel
-# def delete_channel(channel):
-#     db.delete(db.key("channel", channel)) 
-#     return redirect("/")
+@app.route("/delete-channel/<channel>")
+def delete_channel(channel):
+    db.delete(db.key("channel", channel)) 
+    return redirect("/")
 
 if __name__ == "__main__":
     app.run(debug=True, port=8080)
