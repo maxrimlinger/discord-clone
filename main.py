@@ -58,8 +58,6 @@ def channel_query():
     query.order = ["name"]
     return list(query.fetch())
 
-# tiny change
-
 @app.route("/")
 @app.route("/channel/")
 def channel_index():
