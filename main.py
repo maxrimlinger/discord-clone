@@ -76,7 +76,7 @@ def channel(channel):
         )
         db.put(message)
     
-        return redirect("/" + channel)
+        return redirect("/channel/" + channel)
     else:
         message_query = db.query(kind="message")
         message_query.add_filter("channel", "=", channel)
