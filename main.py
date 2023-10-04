@@ -61,25 +61,35 @@ def index():
 def channel_index():
     return redirect("/channel/no_channel") # TODO redirect to "first" channel
 
-@app.route("/channel/<channel>/", methods=["POST", "GET"])
-def channel(channel):
+@app.route("/channel/<selected_channel>/", methods=["POST", "GET"])
+def channel(selected_channel):
     if request.method == "POST":
         message_content = request.form["content"]
-        if message_content.isspace() or message_content == "": return redirect("/channel/" + channel)
+        if message_content.isspace() or message_content == "": return redirect("/channel/" + selected_channel)
         message = datastore.Entity(db.key("message"))
         message.update(
             {
-                "channel": channel,
+                "channel": selected_channel,
                 "content": message_content,
                 "datetime_sent": datetime.now(timezone.utc),
             }
         )
         db.put(message)
     
-        return redirect("/channel/" + channel)
+        return redirect("/channel/" + selected_channel)
     else:
+        channel_query = db.query(kind="channel")
+        channel_query.order = ["name"]
+        channels = list(channel_query.fetch())
+        for channel in channels: # debugging for overwite bug
+            print(channel)
+            # print(channel["datetime_created"])
+        channel_names = [channel.name for channel in channels]
+        if selected_channel not in channel_names:
+            return render_template("404.html")
+
         message_query = db.query(kind="message")
-        message_query.add_filter("channel", "=", channel)
+        message_query.add_filter("channel", "=", selected_channel)
         message_query.order = ["datetime_sent"]
         messages = list(message_query.fetch())
         formatted_messages = []
@@ -89,14 +99,8 @@ def channel(channel):
                                         message["datetime_sent"], 
                                         message.id)
             formatted_messages.append(formatted_message)
-        # TODO query a list of channels to display on the left pane
-        channel_query = db.query(kind="channel")
-        channel_query.order = ["name"]
-        channels = list(channel_query.fetch())
-        for channel in channels:
-            print(channel.key)
-            print(channel["creation_date"])
-        return render_template("index.html", channel=channel, channels=channels, messages=formatted_messages)
+            
+        return render_template("index.html", selected_channel=selected_channel, channels=channels, messages=formatted_messages)
 
 @app.route("/add-channel", methods=["POST", "GET"])
 def add_channel(): # TODO currently doesn't check if channel name already exists, just overwrites
@@ -106,7 +110,7 @@ def add_channel(): # TODO currently doesn't check if channel name already exists
         channel.update(
             {
                 "name": channel_name,
-                "creation_date": datetime.now(timezone.utc),
+                "datetime_created": datetime.now(timezone.utc),
             }
         )
         db.put(channel)

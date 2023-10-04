@@ -10,7 +10,7 @@
         <li>No Channels</li>
         {% else %}
         {% for channel in channels %}
-        <li class="item item-content">{{ channel.name }}</li>
+        <li class="item item-content{% if channel.name == selected_channel %} selected-item{% endif %}">{{ channel.name }}</li>        
         {% endfor %}
         {% endif %}
       </ul>

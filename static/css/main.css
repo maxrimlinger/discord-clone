@@ -85,6 +85,10 @@ h1 {
   text-overflow: ellipsis;
 }
 
+.selected-item {
+  background-color: rgb(73, 73, 73);
+}
+
 .message-content {
   flex-grow: 1;
 }
