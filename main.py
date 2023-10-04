@@ -53,13 +53,16 @@ def get_relational_datetime(dt_message):
     else:
         return str(days_since_message.days) + " days ago"
 
-@app.route("/")
-def index():
-    return redirect("/channel/no_channel") # TODO redirect to "first" channel
+def channel_query():
+    query = db.query(kind="channel")
+    query.order = ["name"]
+    return list(query.fetch())
 
+@app.route("/")
 @app.route("/channel/")
 def channel_index():
-    return redirect("/channel/no_channel") # TODO redirect to "first" channel
+    first_channel = channel_query()[0]
+    return redirect("/channel/" + first_channel["name"])
 
 @app.route("/channel/<selected_channel>/", methods=["POST", "GET"])
 def channel(selected_channel):
@@ -80,9 +83,7 @@ def channel(selected_channel):
     
         return redirect("/channel/" + selected_channel)
     else:
-        channel_query = db.query(kind="channel")
-        channel_query.order = ["name"]
-        channels = list(channel_query.fetch())
+        channels = channel_query()
         for channel in channels: # debugging for overwite bug
             print(channel)
             # print(channel["datetime_created"])
@@ -109,7 +110,14 @@ def channel(selected_channel):
 def add_channel(): # TODO currently doesn't check if channel name already exists, just overwrites
     if request.method == "POST":
         channel_name = request.form["channel-name"]
-        channel = datastore.Entity(db.key("channel", channel_name))
+
+        # don't recreate already existing channels
+        channels = channel_query()
+        channel_names = [channel["name"] for channel in channels]
+        if channel_name in channel_names:
+            return redirect("/channel/" + channel_name)
+
+        channel = datastore.Entity(db.key("channel"))
         channel.update(
             {
                 "name": channel_name,
@@ -127,9 +135,11 @@ def delete_message(id):
     db.delete(db.key("message", id))
     return redirect("/")
 
-@app.route("/delete-channel/<channel>/")
-def delete_channel(channel):
-    db.delete(db.key("channel", channel)) 
+@app.route("/delete-channel/<int:id>/")
+def delete_channel(id):
+    print(id)
+    print(db.key("channel", id))
+    db.delete(db.key("channel", id)) 
     return redirect("/")
 
 if __name__ == "__main__":

@@ -1,5 +1,9 @@
-const chat_list_container = document.getElementById("chat-list-container");
-chat_list_container.scrollTop = chat_list_container.scrollHeight;
+function auto_scroll_bottom() {
+    const chat_list_container = document.getElementById("chat-list-container");
+    if (chat_list_container !== null) {
+        chat_list_container.scrollTop = chat_list_container.scrollHeight;
+    }
+}
 
 function m_move_divider(e) {
     e.preventDefault();
@@ -17,6 +21,7 @@ function m_up_divider(e) {
     document.removeEventListener("mousemove", m_move_divider, true);
 }
 
+auto_scroll_bottom();
 const divider = document.getElementById("pane-divider");
 divider.addEventListener("mousedown", m_down_divider, true);
 document.addEventListener("mouseup", m_up_divider, true);

@@ -6,64 +6,51 @@
     <h1>Channels</h1>
     <div class="list-container">
       <ul class="list">
-        {% if channels|length < 1 %}
-        <li>No Channels</li>
-        {% else %}
-        {% for channel in channels %}
-        {% if channel.name == selected_channel %}
-        <li class="item item-content selected-item">{{ channel.name }}</li>
-        {% else %}
-        <li class="item item-content"><a href="/channel/{{ channel.name }}">{{ channel.name }}</a></li>
-        {% endif %}     
-        {% endfor %}
-        {% endif %}
+        {% if channels|length < 1 %} <li>No Channels</li>
+          {% else %}
+          {% for channel in channels %}
+          {% if channel.name == selected_channel %}
+          <li class="item item-content selected-item" title="{{ channel.datetime_created }}">{{ channel.name }} {{
+            channel.id }}</li>
+          {% else %}
+          <li class="item item-content" title="{{ channel.datetime_created }}"><a href="/channel/{{ channel.name }}">{{
+              channel.name }}</a> {{ channel.id }}</li>
+          {% endif %}
+          {% endfor %}
+          {% endif %}
       </ul>
       <form action="/add-channel" method="POST">
-        <input type="text" name="channel-name"/><input
-          type="submit"
-          value="Add Channel"
-        />
+        <input type="text" name="channel-name" /><input type="submit" value="Add Channel" />
       </form>
     </div>
   </div>
   <div id="pane-divider"></div>
   <div class="chat-pane">
-    <nav><h1>Channel Name</h1></nav>
-    {% if messages|length < 1 %}
-    <h4>There are no messages.</h4>
-    {% else %}
-    <div class="list-container" id="chat-list-container">
-      <ul class="list">
-        {% for message in messages %}
-        <li class="message item" title="{{message.datetime_sent}}">
-          <p class="message-content item-content">
-            {{ message.content }} {{ message.channel }}
-          </p>
-          <a href="/delete-message/{{message.id}}"
-            ><img
-              src="{{ url_for('static', filename='svg/close_button_icon.svg') }}"
-              class="delete-image"
-          /></a>
-        </li>
-        {% endfor %}
-      </ul>
-    </div>
-    {% endif %}
-    <div class="form-container">
-      <form action="/channel/{{ selected_channel }}" method="POST">
-        <input
-          type="text"
-          name="content"
-          placeholder="Start typing..."
-          id="textbox"
-        /><input
-          type="image"
-          alt="Submit"
-          value="Add Message"
-          src="{{ url_for('static', filename='svg/send_button_icon.svg') }}"
-        />
-      </form>
-    </div>
+    <nav>
+      <h1>{{ selected_channel }}</h1>
+    </nav>
+    {% if messages|length < 1 %} <h4>There are no messages.</h4>
+      {% else %}
+      <div class="list-container" id="chat-list-container">
+        <ul class="list">
+          {% for message in messages %}
+          <li class="message item" title="{{message.datetime_sent}}">
+            <p class="message-content item-content">
+              {{ message.content }}
+            </p>
+            <a href="/delete-message/{{message.id}}"><img
+                src="{{ url_for('static', filename='svg/close_button_icon.svg') }}" class="delete-image" /></a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+      <div class="form-container">
+        <form action="/channel/{{ selected_channel }}" method="POST">
+          <input type="text" name="content" placeholder="Start typing..." id="textbox" /><input type="image"
+            alt="Submit" value="Add Message" src="{{ url_for('static', filename='svg/send_button_icon.svg') }}" />
+        </form>
+      </div>
   </div>
 </div>
 <script src="{{ url_for('static', filename='js/index_script.js') }}"></script>

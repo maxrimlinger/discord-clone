@@ -16,7 +16,7 @@ body {
 
 #content {
   display: grid;
-  grid-template-columns: 240px 2px 1fr;
+  grid-template-columns: 400px 2px 1fr;
 }
 
 .channel-pane {
