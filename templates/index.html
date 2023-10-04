@@ -10,7 +10,11 @@
         <li>No Channels</li>
         {% else %}
         {% for channel in channels %}
-        <li class="item item-content{% if channel.name == selected_channel %} selected-item{% endif %}">{{ channel.name }}</li>        
+        {% if channel.name == selected_channel %}
+        <li class="item item-content selected-item">{{ channel.name }}</li>
+        {% else %}
+        <li class="item item-content"><a href="/channel/{{ channel.name }}">{{ channel.name }}</a></li>
+        {% endif %}     
         {% endfor %}
         {% endif %}
       </ul>
@@ -46,7 +50,7 @@
     </div>
     {% endif %}
     <div class="form-container">
-      <form action="/channel/{{ channel }}" method="POST">
+      <form action="/channel/{{ selected_channel }}" method="POST">
         <input
           type="text"
           name="content"

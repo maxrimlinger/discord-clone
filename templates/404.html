@@ -1,5 +1,16 @@
-{% extends 'base.html' %} {% block head %}
-<title>404</title>
-{% endblock %} {% block body %}
-<h1 style="color: black;">Channel not found</h1>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <style>
+        h1 {
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Channel Not Found</h1>
+</body>
+</html>

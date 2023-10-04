@@ -65,7 +65,9 @@ def channel_index():
 def channel(selected_channel):
     if request.method == "POST":
         message_content = request.form["content"]
-        if message_content.isspace() or message_content == "": return redirect("/channel/" + selected_channel)
+        if message_content.isspace() or message_content == "": 
+            return redirect("/channel/" + selected_channel)
+        
         message = datastore.Entity(db.key("message"))
         message.update(
             {
@@ -84,7 +86,8 @@ def channel(selected_channel):
         for channel in channels: # debugging for overwite bug
             print(channel)
             # print(channel["datetime_created"])
-        channel_names = [channel.name for channel in channels]
+
+        channel_names = [channel["name"] for channel in channels]
         if selected_channel not in channel_names:
             return render_template("404.html")
 
@@ -115,16 +118,16 @@ def add_channel(): # TODO currently doesn't check if channel name already exists
         )
         db.put(channel)
 
-        return redirect("/")
+        return redirect("/channel/" + channel_name)
     else:
         return redirect("/")
     
-@app.route("/delete-message/<int:id>")
+@app.route("/delete-message/<int:id>/")
 def delete_message(id):
     db.delete(db.key("message", id))
     return redirect("/")
 
-@app.route("/delete-channel/<channel>")
+@app.route("/delete-channel/<channel>/")
 def delete_channel(channel):
     db.delete(db.key("channel", channel)) 
     return redirect("/")
