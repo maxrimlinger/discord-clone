@@ -9,7 +9,7 @@
         {% if channels|length < 1 %} <li>No Channels</li>
           {% else %}
           {% for channel in channels %}
-          {% if channel.name == selected_channel %}
+          {% if channel.name == selected_channel_name %}
           <li class="item item-content selected-item" title="{{ channel.datetime_created }}">{{ channel.name }} {{
             channel.id }}</li>
           {% else %}
@@ -27,7 +27,7 @@
   <div id="pane-divider"></div>
   <div class="chat-pane">
     <nav>
-      <h1>{{ selected_channel }}</h1>
+      <h1>{{ selected_channel_name }}</h1>
     </nav>
     {% if messages|length < 1 %} <h4>There are no messages.</h4>
       {% else %}
@@ -39,14 +39,14 @@
               {{ message.content }}
             </p>
             <a href="/delete-message/{{message.id}}"><img
-                src="{{ url_for('static', filename='svg/close_button_icon.svg') }}" class="delete-image" /></a>
+                src="{{ url_for('static', filename='svg/ellipses.svg') }}" class="delete-image" /></a>
           </li>
           {% endfor %}
         </ul>
       </div>
       {% endif %}
       <div class="form-container">
-        <form action="/channel/{{ selected_channel }}" method="POST">
+        <form action="/channel/{{ selected_channel_name }}" method="POST">
           <input type="text" name="content" placeholder="Start typing..." id="textbox" /><input type="image"
             alt="Submit" value="Add Message" src="{{ url_for('static', filename='svg/send_button_icon.svg') }}" />
         </form>
