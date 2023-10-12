@@ -21,3 +21,4 @@ __pycache__/
 /static/adobe/
 execpolicy.txt
 env/
+set_vars.cmd

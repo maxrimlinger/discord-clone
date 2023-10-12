@@ -1,3 +1,4 @@
 env/
 execpolicy.txt
 static/adobe/
+set_vars.cmd
