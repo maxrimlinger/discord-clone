@@ -10,15 +10,14 @@
           {% else %}
           {% for channel in channels %}
           {% if channel.name == selected_channel_name %}
-          <li class="item selected-item" title="{{ channel.datetime_created }}">
-            <p class="item-content">{{ channel.name }} {{
-              channel.id }}</p><a href="/delete-channel/{{ channel.id }}"><img
+          <li class="item selected-item">
+            <p class="item-content">{{ channel.name }}</p><a href="/delete-channel/{{ channel.id }}"><img
                 src="{{ url_for('static', filename='svg/ellipses.svg') }}" class="ellipses-image" /></a>
           </li>
           {% else %}
-          <li class="item" title="{{ channel.datetime_created }}">
+          <li class="item">
             <p class="item-content"><a href="/channel/{{ channel.name }}">{{
-                channel.name }}</a> {{ channel.id }}</p><a href="/delete-channel/{{ channel.id }}"><img
+                channel.name }}</a></p><a href="/delete-channel/{{ channel.id }}"><img
                 src="{{ url_for('static', filename='svg/ellipses.svg') }}" class="ellipses-image" /></a>
           </li>
           {% endif %}
@@ -40,14 +39,14 @@
     {% if messages|length < 1 %} <h4>There are no messages.</h4>
       {% else %}
       <div class="list-container" id="chat-list-container">
+        <dialog><a>Delete</a></dialog>
         <ul class="list">
           {% for message in messages %}
-          <li class="item" title="{{message.datetime_sent}}">
-            <p class="item-content">
+          <li class="item">
+            <p class="item-content" title="{{message.datetime_sent}}">
               {{ message.content }}
             </p><button type="button" onclick="show_ellipses_menu(this)"><img
                 src="{{ url_for('static', filename='svg/ellipses.svg') }}" class="ellipses-image" /></button>
-            <dialog class="dialog{{ message.id }}">Test</dialog>
           </li>
           {% endfor %}
         </ul>
