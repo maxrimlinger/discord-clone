@@ -6,7 +6,8 @@ function auto_scroll_bottom() {
 }
 
 function show_ellipses_menu(element) {
-    console.log(element);
+    const dialog = element.parentNode.querySelector("dialog");
+    console.log(dialog);
 }
 
 function m_move_divider(e) {
