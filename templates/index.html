@@ -10,15 +10,19 @@
           {% else %}
           {% for channel in channels %}
           {% if channel.name == selected_channel_name %}
-          <li class="item item-content selected-item" title="{{ channel.datetime_created }}">{{ channel.name }} {{
-            channel.id }}</li>
+          <li class="item selected-item" title="{{ channel.datetime_created }}">
+            <p class="item-content">{{ channel.name }} {{
+              channel.id }}</p><a href="/delete-channel/{{ channel.id }}"><img
+                src="{{ url_for('static', filename='svg/ellipses.svg') }}" class="ellipses-image" /></a>
+          </li>
           {% else %}
-          <li class="item item-content" title="{{ channel.datetime_created }}"><a href="/channel/{{ channel.name }}">{{
-              channel.name }}</a> {{ channel.id }}</li>
-          {% endif %}
-          {% endfor %}
-          {% endif %}
-      </ul>
+          <li class="item" title="{{ channel.datetime_created }}">
+            <p class="item-content"><a href="/channel/{{ channel.name }}">{{
+                channel.name }}</a> {{ channel.id }}</p><a href="/delete-channel/{{ channel.id }}"><img
+                src="{{ url_for('static', filename='svg/ellipses.svg') }}" class="ellipses-image" /></a>
+          </li>{% endif %}{% endfor %}{% endif %}</ul>
+    </div>
+    <div class="form-container">
       <form action="/add-channel" method="POST">
         <input type="text" name="channel-name" /><input type="submit" value="Add Channel" />
       </form>
@@ -34,12 +38,12 @@
       <div class="list-container" id="chat-list-container">
         <ul class="list">
           {% for message in messages %}
-          <li class="message item" title="{{message.datetime_sent}}">
-            <p class="message-content item-content">
+          <li class="item" title="{{message.datetime_sent}}">
+            <p class="item-content">
               {{ message.content }}
             </p>
-            <a href="/delete-message/{{message.id}}"><img
-                src="{{ url_for('static', filename='svg/ellipses.svg') }}" class="delete-image" /></a>
+            <a href="/delete-message/{{message.id}}"><img src="{{ url_for('static', filename='svg/ellipses.svg') }}"
+                class="ellipses-image" /></a>
           </li>
           {% endfor %}
         </ul>
