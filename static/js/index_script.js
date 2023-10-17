@@ -5,6 +5,10 @@ function auto_scroll_bottom() {
     }
 }
 
+function show_ellipses_menu(element) {
+    console.log(element);
+}
+
 function m_move_divider(e) {
     e.preventDefault();
     const grid = document.getElementById("content");

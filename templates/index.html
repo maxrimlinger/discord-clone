@@ -7,7 +7,7 @@
     <div class="list-container">
       <ul class="list">
         {% if channels|length < 1 %} <li>No Channels</li>
-          {% else %}    
+          {% else %}
           {% for channel in channels %}
           {% if channel.name == selected_channel_name %}
           <li class="item selected-item" title="{{ channel.datetime_created }}">
@@ -45,9 +45,8 @@
           <li class="item" title="{{message.datetime_sent}}">
             <p class="item-content">
               {{ message.content }}
-            </p>
-            <a href="/delete-message/{{message.id}}"><img src="{{ url_for('static', filename='svg/ellipses.svg') }}"
-                class="ellipses-image" /></a>
+            </p><button type="button" onclick="show_ellipses_menu(this)"><img
+                src="{{ url_for('static', filename='svg/ellipses.svg') }}" class="ellipses-image" /></button>
           </li>
           {% endfor %}
         </ul>

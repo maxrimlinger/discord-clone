@@ -133,3 +133,9 @@ input[type="image"] {
 img {
   display: block;
 }
+
+button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
