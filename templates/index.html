@@ -7,7 +7,7 @@
     <div class="list-container">
       <ul class="list">
         {% if channels|length < 1 %} <li>No Channels</li>
-          {% else %}
+          {% else %}    
           {% for channel in channels %}
           {% if channel.name == selected_channel_name %}
           <li class="item selected-item" title="{{ channel.datetime_created }}">
@@ -20,7 +20,11 @@
             <p class="item-content"><a href="/channel/{{ channel.name }}">{{
                 channel.name }}</a> {{ channel.id }}</p><a href="/delete-channel/{{ channel.id }}"><img
                 src="{{ url_for('static', filename='svg/ellipses.svg') }}" class="ellipses-image" /></a>
-          </li>{% endif %}{% endfor %}{% endif %}</ul>
+          </li>
+          {% endif %}
+          {% endfor %}
+          {% endif %}
+      </ul>
     </div>
     <div class="form-container">
       <form action="/add-channel" method="POST">

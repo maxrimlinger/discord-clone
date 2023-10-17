@@ -5,12 +5,6 @@ function auto_scroll_bottom() {
     }
 }
 
-function setup_divider() {  
-    divider.addEventListener("mousedown", m_down_divider, true);
-    const divider = document.getElementById("pane-divider");
-    document.addEventListener("mouseup", m_up_divider, true);
-}
-
 function m_move_divider(e) {
     e.preventDefault();
     const grid = document.getElementById("content");
@@ -25,6 +19,12 @@ function m_down_divider(e) {
 function m_up_divider(e) {
     e.preventDefault();
     document.removeEventListener("mousemove", m_move_divider, true);
+}
+
+function setup_divider() {  
+    const divider = document.getElementById("pane-divider");
+    divider.addEventListener("mousedown", m_down_divider, true);
+    document.addEventListener("mouseup", m_up_divider, true);
 }
 
 auto_scroll_bottom();
