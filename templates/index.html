@@ -12,13 +12,13 @@
           {% if channel.name == selected_channel_name %}
           <li class="item selected-item">
             <p class="item-content">{{ channel.name }}</p><a href="/delete-channel/{{ channel.id }}"><img
-                src="{{ url_for('static', filename='svg/ellipses.svg') }}" class="ellipses-image" /></a>
+                src="{{ url_for('static', filename='svg/close_button_icon.svg') }}" class="delete-image" /></a>
           </li>
           {% else %}
           <li class="item">
             <p class="item-content"><a href="/channel/{{ channel.name }}">{{
                 channel.name }}</a></p><a href="/delete-channel/{{ channel.id }}"><img
-                src="{{ url_for('static', filename='svg/ellipses.svg') }}" class="ellipses-image" /></a>
+                src="{{ url_for('static', filename='svg/close_button_icon.svg') }}" class="delete-image" /></a>
           </li>
           {% endif %}
           {% endfor %}
@@ -45,8 +45,8 @@
           <li class="item">
             <p class="item-content" title="{{message.datetime_sent}}">
               {{ message.content }}
-            </p><button type="button" onclick="show_ellipses_menu(this)"><img
-                src="{{ url_for('static', filename='svg/ellipses.svg') }}" class="ellipses-image" /></button>
+            </p><a href="/delete-message/{{ message.id }}"><img
+                src="{{ url_for('static', filename='svg/close_button_icon.svg') }}" class="delete-image" /></a>
           </li>
           {% endfor %}
         </ul>
