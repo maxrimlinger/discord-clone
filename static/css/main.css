@@ -90,8 +90,12 @@ h1 {
   max-width: 100%;
   overflow: hidden;
   white-space: nowrap;
-  text-overflow: ellipsis;
   flex-grow: 1;
+  word-wrap: break-word;
+}
+
+.channel-content {
+  text-overflow: ellipsis;
 }
 
 .selected-item {

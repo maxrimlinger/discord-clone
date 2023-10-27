@@ -11,12 +11,12 @@
           {% for channel in channels %}
           {% if channel.name == selected_channel_name %}
           <li class="item selected-item">
-            <p class="item-content">{{ channel.name }}</p><a href="/delete-channel/{{ channel.id }}"><img
+            <p class="item-content channel-content">{{ channel.name }}</p><a href="/delete-channel/{{ channel.id }}"><img
                 src="{{ url_for('static', filename='svg/close_button_icon.svg') }}" class="delete-image" /></a>
           </li>
           {% else %}
           <li class="item">
-            <p class="item-content"><a href="/channel/{{ channel.name }}">{{
+            <p class="item-content channel-content"><a href="/channel/{{ channel.name }}">{{
                 channel.name }}</a></p><a href="/delete-channel/{{ channel.id }}"><img
                 src="{{ url_for('static', filename='svg/close_button_icon.svg') }}" class="delete-image" /></a>
           </li>
