@@ -154,3 +154,7 @@ button {
   color: inherit;
   text-decoration: none;
 }
+
+.channel-pane a:hover {
+  text-decoration: underline;
+}
