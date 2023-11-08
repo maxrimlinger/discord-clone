@@ -63,6 +63,7 @@ h1 {
   overflow: auto;
   padding: 0 8px;
   flex-grow: 1;
+  max-width: 100%;
 }
 
 .list {
