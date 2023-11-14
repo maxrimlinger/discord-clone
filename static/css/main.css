@@ -123,7 +123,7 @@ form {
   gap: 5px;
 }
 
-#textbox {
+.textbox {
   flex-grow: 1;
   background: transparent;
   color: var(--text);
@@ -131,6 +131,7 @@ form {
   font-size: var(--input-font-size);
   line-height: var(--input-font-size);
   height: var(--input-font-size);
+  width: 20px;
 }
 
 input[type="image"] {

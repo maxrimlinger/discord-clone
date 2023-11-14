@@ -28,7 +28,8 @@
     </div>
     <div class="form-container">
       <form action="/add-channel" method="POST">
-        <input type="text" name="channel-name" /><input type="submit" value="Add Channel" />
+        <input type="text" name="channel-name" placeholder="Add Channel" class="textbox"/><input type="image" alt="Submit"
+        value="Add Channel" src="{{ url_for('static', filename='svg/send_button_icon.svg') }}" />
       </form>
     </div>
   </div>
@@ -54,7 +55,7 @@
     </div>
     <div class="form-container">
       <form action="/channel/{{ selected_channel_name }}" method="POST">
-        <input type="text" name="content" placeholder="Start typing..." id="textbox" /><input type="image" alt="Submit"
+        <input type="text" name="content" placeholder="Start typing..." class="textbox" /><input type="image" alt="Submit"
           value="Add Message" src="{{ url_for('static', filename='svg/send_button_icon.svg') }}" />
       </form>
     </div>
