@@ -23,7 +23,7 @@ body {
 
 #content {
   display: grid;
-  grid-template-columns: 250px 2px 1fr;
+  grid-template-columns: 250px 2px minmax(0, 1fr);
 }
 
 .channel-pane {
@@ -63,7 +63,6 @@ h1 {
   overflow: auto;
   padding: 0 8px;
   flex-grow: 1;
-  max-width: 100%;
 }
 
 .list {
@@ -86,17 +85,15 @@ h1 {
 
 .item-content {
   padding: 3px 6px;
-  overflow: hidden;
   font-size: 1.5rem;
-  max-width: 100%;
   overflow: hidden;
-  white-space: nowrap;
   flex-grow: 1;
-  word-wrap: break-word;
+  word-break: break-word;
 }
 
 .channel-content {
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .selected-item {
