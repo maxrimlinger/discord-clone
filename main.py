@@ -126,10 +126,12 @@ def add_channel(): # TODO currently doesn't check if channel name already exists
     else:
         return redirect("/")
     
-@app.route("/delete-message/<int:id>/")
+@app.route("/delete-message/<int:id>")
 def delete_message(id):
     db.delete(db.key("message", id))
-    return redirect("/")
+    redirect_channel = request.args.get("redirect")
+    print(type(redirect_channel))
+    return redirect("/channel/" + redirect_channel)
 
 @app.route("/delete-channel/<int:id>/")
 def delete_channel(id):

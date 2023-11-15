@@ -46,7 +46,7 @@
           <li class="item">
             <p class="item-content" title="{{message.datetime_sent}}">
               {{ message.content }}
-            </p><a href="/delete-message/{{ message.id }}"><img
+            </p><a href="/delete-message/{{ message.id }}?redirect={{ selected_channel_name }}"><img
                 src="{{ url_for('static', filename='svg/close_button_icon.svg') }}" class="delete-image" /></a>
           </li>
           {% endfor %}
