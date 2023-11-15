@@ -18,7 +18,7 @@
           {% else %}
           <li class="item">
             <p class="item-content channel-content"><a href="/channel/{{ channel.name }}">{{
-                channel.name }}</a></p><a href="/delete-channel/{{ channel.id }}"><img
+                channel.name }}</a></p><a href="/delete-channel/{{ channel.id }}" class="delete-button"><img
                 src="{{ url_for('static', filename='svg/close_button_icon.svg') }}" class="delete-image" /></a>
           </li>
           {% endif %}
@@ -46,7 +46,7 @@
           <li class="item">
             <p class="item-content" title="{{message.datetime_sent}}">
               {{ message.content }}
-            </p><a href="/delete-message/{{ message.id }}?redirect={{ selected_channel_name }}"><img
+            </p><a href="/delete-message/{{ message.id }}?redirect={{ selected_channel_name }}" class="delete-button"><img
                 src="{{ url_for('static', filename='svg/close_button_icon.svg') }}" class="delete-image" /></a>
           </li>
           {% endfor %}

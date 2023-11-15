@@ -108,6 +108,10 @@ h1 {
   margin-left: 0.3rem;
 }
 
+.delete-button:focus .delete-image {
+  opacity: 1;
+}
+
 .form-container {
   width: 100%;
   padding: var(--form-container-padding);
