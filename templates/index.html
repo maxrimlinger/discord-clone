@@ -35,9 +35,9 @@
   </div>
   <div id="pane-divider"></div>
   <div class="chat-pane">
-    <nav>
+    <header>
       <h1>{{ selected_channel_name }}</h1>
-    </nav>
+    </header>
     <div class="list-container" id="chat-list-container">
       <ul class="list">
         {% if messages|length < 1 %} <li>There are no messages.</li>
@@ -55,7 +55,7 @@
     </div>
     <div class="form-container">
       <form action="/channel/{{ selected_channel_name }}" method="POST">
-        <input type="text" name="content" placeholder="Start typing..." class="textbox" /><input type="image" alt="Submit"
+        <input type="text" name="content" placeholder="Start typing..." class="textbox"/><input type="image" alt="Submit"
           value="Add Message" src="{{ url_for('static', filename='svg/send_button_icon.svg') }}" />
       </form>
     </div>

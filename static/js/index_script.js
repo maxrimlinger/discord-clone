@@ -16,8 +16,20 @@ function show_ellipses_menu(element) {
 
 function m_move_divider(e) {
     e.preventDefault();
-    const grid = document.getElementById("content");
-    grid.style["grid-template-columns"] = e.clientX + "px 2px 1fr";
+    const x = e.clientX;
+    if (x >= 150 && x < 400) {
+        // normal range
+        const grid = document.getElementById("content");
+        grid.style["grid-template-columns"] = x + "px 2px 1fr";
+    } else if (x >= 10 && x < 150) {
+        // snap open
+        const grid = document.getElementById("content");
+        grid.style["grid-template-columns"] = "150px 2px 1fr";
+    } else if (x < 10) {
+        // snap closed
+        const grid = document.getElementById("content");
+        grid.style["grid-template-columns"] = "0px 2px 1fr";
+    }
 }
 
 function m_down_divider(e) {

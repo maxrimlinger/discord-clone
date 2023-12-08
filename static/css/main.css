@@ -23,7 +23,7 @@ body {
 
 #content {
   display: grid;
-  grid-template-columns: 250px 2px minmax(0, 1fr);
+  grid-template-columns: 25ch 2px minmax(0, 1fr);
 }
 
 .channel-pane {
@@ -68,6 +68,7 @@ h1 {
 .list {
   color: var(--text);
   width: 100%;
+  overflow: hidden; /* stops scroll bar when channel pane gets crushed. probably not needed if you make a min channel bar width */
 }
 
 .item {
