@@ -37,6 +37,8 @@
   <div class="chat-pane">
     <header>
       <h1>{{ selected_channel_name }}</h1>
+      <div class="g-signin2" data-onsuccess="onSignIn"></div>
+      <a href="#" onclick="signOut();">Sign out</a>
     </header>
     <div class="list-container" id="chat-list-container">
       <ul class="list">
