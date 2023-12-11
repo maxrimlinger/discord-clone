@@ -28,8 +28,8 @@
     </div>
     <div class="form-container">
       <form action="/add-channel" method="POST">
-        <input type="text" name="channel-name" placeholder="Add Channel" class="textbox"/><input type="image" alt="Submit"
-        value="Add Channel" src="{{ url_for('static', filename='svg/send_button_icon.svg') }}" />
+        <input type="text" name="channel-name" placeholder="Add Channel" class="textbox" /><input type="image"
+          alt="Submit" value="Add Channel" src="{{ url_for('static', filename='svg/send_button_icon.svg') }}" />
       </form>
     </div>
   </div>
@@ -37,8 +37,9 @@
   <div class="chat-pane">
     <header>
       <h1>{{ selected_channel_name }}</h1>
-      <div class="g-signin2" data-onsuccess="onSignIn"></div>
-      <a href="#" onclick="signOut();">Sign out</a>
+      <div id="g_id_onload" data-client_id="325587338034-lr4ha1j1hkj8ba9h1qdrp8u3gcoc03oc.apps.googleusercontent.com" data-callback="handleCredentialResponse">
+      </div>
+      <div class="g_id_signin" data-type="standard"></div>
     </header>
     <div class="list-container" id="chat-list-container">
       <ul class="list">
@@ -48,8 +49,9 @@
           <li class="item">
             <p class="item-content" title="{{message.datetime_sent}}">
               {{ message.content }}
-            </p><a href="/delete-message/{{ message.id }}?redirect={{ selected_channel_name }}" class="delete-button"><img
-                src="{{ url_for('static', filename='svg/close_button_icon.svg') }}" class="delete-image" /></a>
+            </p><a href="/delete-message/{{ message.id }}?redirect={{ selected_channel_name }}"
+              class="delete-button"><img src="{{ url_for('static', filename='svg/close_button_icon.svg') }}"
+                class="delete-image" /></a>
           </li>
           {% endfor %}
           {% endif %}
@@ -57,8 +59,8 @@
     </div>
     <div class="form-container">
       <form action="/channel/{{ selected_channel_name }}" method="POST">
-        <input type="text" name="content" placeholder="Start typing..." class="textbox"/><input type="image" alt="Submit"
-          value="Add Message" src="{{ url_for('static', filename='svg/send_button_icon.svg') }}" />
+        <input type="text" name="content" placeholder="Start typing..." class="textbox" /><input type="image"
+          alt="Submit" value="Add Message" src="{{ url_for('static', filename='svg/send_button_icon.svg') }}" />
       </form>
     </div>
   </div>
