@@ -141,4 +141,5 @@ def delete_channel(id):
     return redirect("/")
 
 if __name__ == "__main__":
-    app.run(debug=True, port=8080)
+    context = ("ssl/server.crt", "ssl/server.key")
+    app.run(debug=True, port=8080, ssl_context=context)
