@@ -1,10 +1,19 @@
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, render_template, url_for, request, redirect, session, abort
 from google.cloud import datastore
 from datetime import datetime, timezone, timedelta, date
 import pytz
 
 app = Flask(__name__)
 db = datastore.Client()
+
+def login_is_required(function):
+    def wrapper(*args, **kwargs):
+        if "google_id" not in session:
+            return abort(401)
+        else:
+            return function()
+    wrapper.__name__ = function.__name__
+    return wrapper
 
 class Message():
     """Represents a chat message. This class does the heavy lifting of
@@ -59,12 +68,17 @@ def channel_query():
     return list(query.fetch())
 
 @app.route("/")
+def index():
+    return render_template("login.html")
+
 @app.route("/channel/")
+@login_is_required
 def channel_index():
     first_channel = channel_query()[0]
     return redirect("/channel/" + first_channel["name"])
 
 @app.route("/channel/<selected_channel_name>/", methods=["POST", "GET"])
+@login_is_required
 def channel(selected_channel_name):
     if request.method == "POST":
         message_content = request.form["content"]
@@ -103,6 +117,7 @@ def channel(selected_channel_name):
         return render_template("index.html", selected_channel_name=selected_channel_name, channels=channels, messages=formatted_messages)
 
 @app.route("/add-channel", methods=["POST", "GET"])
+@login_is_required
 def add_channel(): # TODO currently doesn't check if channel name already exists, just overwrites
     if request.method == "POST":
         channel_name = request.form["channel-name"]
@@ -127,6 +142,7 @@ def add_channel(): # TODO currently doesn't check if channel name already exists
         return redirect("/")
     
 @app.route("/delete-message/<int:id>")
+@login_is_required
 def delete_message(id):
     db.delete(db.key("message", id))
     redirect_channel = request.args.get("redirect")
@@ -134,6 +150,7 @@ def delete_message(id):
     return redirect("/channel/" + redirect_channel)
 
 @app.route("/delete-channel/<int:id>/")
+@login_is_required
 def delete_channel(id):
     print(id)
     print(db.key("channel", id))
