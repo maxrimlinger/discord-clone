@@ -17,7 +17,7 @@ function show_ellipses_menu(element) {
 function m_move_divider(e) {
     e.preventDefault();
     const x = e.clientX;
-    if (x >= 150 && x < 400) {
+    if (x >= 150 && x < 600) {
         // normal range
         const grid = document.getElementById("content");
         grid.style["grid-template-columns"] = x + "px 2px 1fr";

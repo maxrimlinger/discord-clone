@@ -1,38 +1,62 @@
+import os
+import json
 import requests
-import cachecontrol
-from flask import Flask, render_template, url_for, request, redirect, session, abort
+from oauthlib.oauth2 import WebApplicationClient
+from flask import Flask, render_template, url_for, request, redirect, abort
 from google.cloud import datastore
-from google_auth_oauthlib.flow import Flow
-import google.auth.transport.requests
-from google.oauth2 import id_token
-from flask_login import (
-    LoginManager,
-    current_user,
-    login_required,
-    login_user,
-    logout_user,
-)
+from flask_login import LoginManager, current_user, login_required, login_user, logout_user
 from datetime import datetime, timezone, timedelta, date
 import pytz
 
 app = Flask(__name__)
-app.secret_key = "SECRET"
+app.secret_key = os.urandom(12).hex()
 db = datastore.Client()
-
-GOOGLE_CLIENT_ID = "325587338034-lr4ha1j1hkj8ba9h1qdrp8u3gcoc03oc.apps.googleusercontent.com"
-
-flow = Flow.from_client_secrets_file(
-    client_secrets_file="auth\client_secrets.json",
-    scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"], 
-    redirect_uri="https://127.0.0.1:8080/callback"
-)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.get(user_id)
+    db_user = db.get(db.key("user", user_id))
+    user = User(
+        user_id,
+        db_user["first_name"],
+        db_user["last_name"],
+        db_user["email"],
+        db_user["picture"],
+        db_user["last_login"],
+    )
+    return user
+
+def get_client_secrets():
+    file = open("auth\client_secrets.json")
+    data = json.load(file)
+    file.close()
+    return data["web"]
+
+client_secrets = get_client_secrets()
+auth_client = WebApplicationClient(client_secrets["client_id"])
+GOOGLE_DISCOVERY_URL = "https://accounts.google.com/.well-known/openid-configuration"
+USERINFO_ENDPOINT = requests.get(GOOGLE_DISCOVERY_URL).json()["userinfo_endpoint"]
+
+class User():
+    def __init__(self, id, first_name, last_name, email, profile_picture, last_login):
+        self.id = id
+        self.first_name = first_name
+        self.last_name = last_name
+        self.email = email
+        self.profile_picture = profile_picture
+        self.last_login = last_login
+
+        # required for flask_login
+        self.is_anonymous = False
+        self.is_authenticated = True
+        self.is_active = True
+
+    def get_id(self):
+        return str(self.id)
+
+    
 
 class Message():
     """Represents a chat message. This class does the heavy lifting of
@@ -86,55 +110,86 @@ def channel_query():
     query.order = ["name"]
     return list(query.fetch())
 
+# Routes
+
 @app.route("/")
 def index():
-    return render_template("/login.html")
+    if current_user.is_authenticated:
+        return redirect("/channel")
+    else:
+        return render_template("/login.html")
 
 @app.route("/login")
 def login():
-    authorization_url, state = flow.authorization_url()
-    session["state"] = state
-    return redirect(authorization_url)
+    request_uri = auth_client.prepare_request_uri(
+        client_secrets["auth_uri"],
+        redirect_uri="https://127.0.0.1:8080/callback",
+        scope=["openid", "email", "profile"],
+    )
+    return redirect(request_uri)
 
 @app.route("/logout")
 def logout():
-    session.clear()
+    logout_user()
     return redirect("/")
 
 
 @app.route("/callback")
 def callback():
-    flow.fetch_token(authorization_response=request.url)
-
-    if not session["state"] == request.args["state"]:
-        abort(500)
-
-    credentials = flow.credentials
-    request_session = requests.session()
-    cached_session = cachecontrol.CacheControl(request_session)
-    token_request = google.auth.transport.requests.Request(session=cached_session)
-
-    id_info = id_token.verify_oauth2_token(
-        id_token=credentials._id_token,
-        request=token_request,
-        audience=GOOGLE_CLIENT_ID
+    code = request.args.get("code")
+    token_url, headers, body = auth_client.prepare_token_request(
+        client_secrets["token_uri"],
+        authorization_response=request.url,
+        redirect_url=request.base_url,
+        code=code,
     )
+    token_response = requests.post(
+        token_url,
+        headers=headers,
+        data=body,
+        auth=(client_secrets["client_id"], client_secrets["client_secret"]),
+    )
+    auth_client.parse_request_body_response(json.dumps(token_response.json()))
     
-    session["google_id"] = id_info.get("sub")
-    session["name"] = id_info.get("name")
+    uri, headers, body = auth_client.add_token(USERINFO_ENDPOINT)
+    userinfo_response = requests.get(uri, headers=headers, data=body).json()
+
+    if not userinfo_response.get("email_verified"):
+        return "User email not available or not verified by Google.", 400
+
+    now = datetime.now(timezone.utc)
+
+    user = User(
+        userinfo_response["sub"], userinfo_response["given_name"], 
+        userinfo_response["family_name"], userinfo_response["email"], 
+        userinfo_response["picture"], now
+    )
+
+    user_entity = datastore.Entity(db.key("user", user.id))
+    user_entity.update(
+        {
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "email": user.email,
+            "picture": user.profile_picture,
+            "last_login": now
+        }
+    )
+    db.put(user_entity)
+
+    login_user(user)
+
     return redirect("/channel")
 
 @app.route("/channel/")
+@login_required
 def channel_index():
-    if "google_id" not in session:
-            return abort(401)
     first_channel = channel_query()[0]
     return redirect("/channel/" + first_channel["name"])
 
 @app.route("/channel/<selected_channel_name>/", methods=["POST", "GET"])
+@login_required
 def channel(selected_channel_name):
-    if "google_id" not in session:
-            return abort(401)
     if request.method == "POST":
         message_content = request.form["content"]
         if message_content.isspace() or message_content == "": 
@@ -155,8 +210,7 @@ def channel(selected_channel_name):
         channels = channel_query()
         channel_names = [channel["name"] for channel in channels]
         if selected_channel_name not in channel_names:
-            return render_template("404.html")
-
+            return "Channel not found"
         message_query = db.query(kind="message")
         message_query.add_filter("channel", "=", selected_channel_name)
         message_query.order = ["datetime_sent"]
@@ -168,13 +222,16 @@ def channel(selected_channel_name):
                                         message["datetime_sent"], 
                                         message.id)
             formatted_messages.append(formatted_message)
-            
-        return render_template("index.html", selected_channel_name=selected_channel_name, channels=channels, messages=formatted_messages)
+        return render_template(
+            "index.html", 
+            selected_channel_name=selected_channel_name, channels=channels, 
+            messages=formatted_messages, user_first_name=current_user.first_name,
+            user_last_name=current_user.last_name, user_profile_picture=current_user.profile_picture
+        )
 
 @app.route("/add-channel", methods=["POST", "GET"])
+@login_required
 def add_channel(): # TODO currently doesn't check if channel name already exists, just overwrites
-    if "google_id" not in session:
-            return abort(401)
     if request.method == "POST":
         channel_name = request.form["channel-name"]
 
@@ -198,20 +255,16 @@ def add_channel(): # TODO currently doesn't check if channel name already exists
         return redirect("/")
     
 @app.route("/delete-message/<int:id>")
+@login_required
 def delete_message(id):
-    if "google_id" not in session:
-            return abort(401)
     db.delete(db.key("message", id))
     redirect_channel = request.args.get("redirect")
     print(type(redirect_channel))
     return redirect("/channel/" + redirect_channel)
 
 @app.route("/delete-channel/<int:id>/")
+@login_required
 def delete_channel(id):
-    if "google_id" not in session:
-            return abort(401)
-    print(id)
-    print(db.key("channel", id))
     db.delete(db.key("channel", id)) 
     return redirect("/")
 

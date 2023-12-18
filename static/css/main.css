@@ -162,3 +162,20 @@ button {
 .channel-pane a:hover {
   text-decoration: underline;
 }
+
+header {
+  display: flex;
+}
+
+header h1 {
+  flex-grow: 1;
+}
+
+h2 {
+  color: var(--text);
+}
+
+#profile_picture {
+  width: 50px;
+  border-radius: 50%;
+}
