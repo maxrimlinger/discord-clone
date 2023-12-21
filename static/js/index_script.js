@@ -21,11 +21,11 @@ function m_move_divider(e) {
         // normal range
         const grid = document.getElementById("content");
         grid.style["grid-template-columns"] = x + "px 2px 1fr";
-    } else if (x >= 10 && x < 150) {
+    } else if (x >= 20 && x < 150) {
         // snap open
         const grid = document.getElementById("content");
         grid.style["grid-template-columns"] = "150px 2px 1fr";
-    } else if (x < 10) {
+    } else if (x < 20) {
         // snap closed
         const grid = document.getElementById("content");
         grid.style["grid-template-columns"] = "0px 2px 1fr";

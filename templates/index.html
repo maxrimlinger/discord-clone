@@ -11,13 +11,13 @@
           {% for channel in channels %}
           {% if channel.name == selected_channel_name %}
           <li class="item selected-item">
-            <p class="item-content channel-content">{{ channel.name }}</p><a
+            <p class="item-content channel-content item-text">{{ channel.name }}</p><a
               href="/delete-channel/{{ channel.id }}"><img
                 src="{{ url_for('static', filename='svg/close_button_icon.svg') }}" class="delete-image" /></a>
           </li>
           {% else %}
           <li class="item">
-            <p class="item-content channel-content"><a href="/channel/{{ channel.name }}">{{
+            <p class="item-content channel-content item-text"><a href="/channel/{{ channel.name }}">{{
                 channel.name }}</a></p><a href="/delete-channel/{{ channel.id }}" class="delete-button"><img
                 src="{{ url_for('static', filename='svg/close_button_icon.svg') }}" class="delete-image" /></a>
           </li>
@@ -38,7 +38,7 @@
     <header>
       <h1>{{ selected_channel_name }}</h1>
       <h2>{{ user_first_name }} {{ user_last_name }}</h2>
-      <img src="{{ user_profile_picture }}" id="profile_picture">
+      <img src="{{ user_profile_picture }}" class="profile-picture">
     </header>
     <div class="list-container" id="chat-list-container">
       <ul class="list">
@@ -47,9 +47,13 @@
           {% for message in messages %}
           <li class="item">
             <img src="{{ message.author_profile_picture }}" class="profile-picture" />
-            <p class="item-content" title="{{message.datetime_sent}}">
-              {{ message.content }}
-            </p><a href="/delete-message/{{ message.id }}?redirect={{ selected_channel_name }}"
+            <div class="item-content">
+              <div><span class="item-text author-text">{{ message.author_first_name }} {{ message.author_last_name }}</span><span
+                  class="item-text date-text">{{message.datetime_sent}}</span></div>
+              <p class="item-text">
+                {{ message.content }}
+              </p>
+            </div><a href="/delete-message/{{ message.id }}?redirect={{ selected_channel_name }}"
               class="delete-button"><img src="{{ url_for('static', filename='svg/close_button_icon.svg') }}"
                 class="delete-image" /></a>
           </li>

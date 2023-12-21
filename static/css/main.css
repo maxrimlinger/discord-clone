@@ -7,7 +7,8 @@
   --light-background: #323232;
   --highlight: #3d3d3d;
   --light-highlight: #434343;
-  --text: #e6e6e6;
+  --accent-text: #efefef;
+  --text: #d6d6d6;
   --accent: #7a00cc;
 }
 
@@ -28,7 +29,7 @@ body {
 
 .channel-pane {
   background-color: var(--dark-background);
-  color: var(--text);
+  color: var(--accent-text);
   font-size: 1.5rem;
 }
 
@@ -52,7 +53,7 @@ body {
 h1,
 h4 {
   padding: 8px 0 0 8px;
-  color: var(--text);
+  color: var(--accent-text);
 }
 
 h1 {
@@ -66,7 +67,6 @@ h1 {
 }
 
 .list {
-  color: var(--text);
   width: 100%;
   overflow: hidden; /* stops scroll bar when channel pane gets crushed. probably not needed if you make a min channel bar width */
 }
@@ -86,15 +86,31 @@ h1 {
 
 .item-content {
   padding: 3px 6px;
-  font-size: 1.5rem;
-  overflow: hidden;
+  overflow: hidden; /* TODO maybe should be moved to .item-text */
   flex-grow: 1;
+}
+
+.item-text {
+  font-size: 1.3rem;
   word-break: break-word;
+  color: var(--text);
+}
+
+.author-text {
+  color: var(--accent-text);
+  font-weight: 500;
+}
+
+.date-text {
+  font-size: 1rem;
+  padding-left: 1ch;
+  color: var(--accent-text);
 }
 
 .channel-content {
   text-overflow: ellipsis;
   white-space: nowrap;
+  color: var(--accent-text);
 }
 
 .selected-item {
@@ -131,7 +147,7 @@ form {
 .textbox {
   flex-grow: 1;
   background: transparent;
-  color: var(--text);
+  color: var(--accent-text);
   border: 0;
   font-size: var(--input-font-size);
   line-height: var(--input-font-size);
@@ -172,10 +188,11 @@ header h1 {
 }
 
 h2 {
-  color: var(--text);
+  color: var(--accent-text);
 }
 
-#profile_picture {
+.profile-picture {
   width: 50px;
+  height: 50px;
   border-radius: 50%;
 }
