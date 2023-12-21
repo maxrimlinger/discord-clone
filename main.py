@@ -63,11 +63,14 @@ class Message():
     converting the date and time the message was sent to a more readible format
     for the frontend.
     """
-    def __init__(self, channel, content, datetime_sent, message_id):
+    def __init__(self, channel, content, datetime_sent, message_id, author_first_name, author_last_name, author_profile_picture):
         self.channel = channel
         self.content = content
         self.datetime_sent = get_relational_datetime(datetime_sent)
         self.id = message_id
+        self.author_first_name = author_first_name
+        self.author_last_name = author_last_name
+        self.author_profile_picture = author_profile_picture
 
 def get_relational_datetime(dt_message):
     now = datetime.now(timezone.utc)
@@ -159,6 +162,8 @@ def callback():
 
     now = datetime.now(timezone.utc)
 
+    print(userinfo_response["sub"])
+
     user = User(
         userinfo_response["sub"], userinfo_response["given_name"], 
         userinfo_response["family_name"], userinfo_response["email"], 
@@ -201,6 +206,7 @@ def channel(selected_channel_name):
                 "channel": selected_channel_name,
                 "content": message_content,
                 "datetime_sent": datetime.now(timezone.utc),
+                "author": current_user.id
             }
         )
         db.put(message)
@@ -211,16 +217,21 @@ def channel(selected_channel_name):
         channel_names = [channel["name"] for channel in channels]
         if selected_channel_name not in channel_names:
             return "Channel not found"
+
         message_query = db.query(kind="message")
         message_query.add_filter("channel", "=", selected_channel_name)
         message_query.order = ["datetime_sent"]
         messages = list(message_query.fetch())
         formatted_messages = []
         for message in messages:
+            author = db.get(db.key("user", message["author"]))
             formatted_message = Message(message["channel"],
                                         message["content"], 
                                         message["datetime_sent"], 
-                                        message.id)
+                                        message.id,
+                                        author["first_name"],
+                                        author["last_name"],
+                                        author["picture"])
             formatted_messages.append(formatted_message)
         return render_template(
             "index.html", 

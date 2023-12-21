@@ -46,6 +46,7 @@
           {% else %}
           {% for message in messages %}
           <li class="item">
+            <img src="{{ message.author_profile_picture }}" class="profile-picture" />
             <p class="item-content" title="{{message.datetime_sent}}">
               {{ message.content }}
             </p><a href="/delete-message/{{ message.id }}?redirect={{ selected_channel_name }}"
