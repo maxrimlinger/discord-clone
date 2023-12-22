@@ -37,18 +37,16 @@
   <div class="chat-pane">
     <header>
       <h1>{{ selected_channel_name }}</h1>
-      <h2>{{ user_first_name }} {{ user_last_name }}</h2>
-      <img src="{{ user_profile_picture }}" class="profile-picture">
     </header>
     <div class="list-container" id="chat-list-container">
       <ul class="list">
-        {% if messages|length < 1 %} <li>There are no messages.</li>
+        {% if messages|length < 1 %} <li class="no-messages-text">There are no messages.</li>
           {% else %}
           {% for message in messages %}
-          <li class="item">
+          <li class="item message">
             <img src="{{ message.author_profile_picture }}" class="profile-picture" />
             <div class="item-content">
-              <div><span class="item-text author-text">{{ message.author_first_name }} {{ message.author_last_name }}</span><span
+              <div class="message-info"><span class="item-text author-text">{{ message.author_first_name }} {{ message.author_last_name }}</span><span
                   class="item-text date-text">{{message.datetime_sent}}</span></div>
               <p class="item-text">
                 {{ message.content }}
