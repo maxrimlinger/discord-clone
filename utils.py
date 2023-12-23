@@ -11,7 +11,7 @@ def get_client_secrets():
 def get_relational_datetime(dt_message):
     now = datetime.now(timezone.utc)
     time_since_message = now - dt_message
-    tz = pytz.timezone("America/New_York")
+    tz = pytz.timezone("America/New_York") # this could potentially be changed
     local_dt_message = dt_message.astimezone(tz)
     local_now = now.astimezone(tz)
 

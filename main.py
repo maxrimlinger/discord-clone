@@ -78,7 +78,7 @@ def channel_query():
     query.order = ["name"]
     return list(query.fetch())
 
-# Routes
+# routes
 
 @app.route("/")
 def index():

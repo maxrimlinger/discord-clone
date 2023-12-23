@@ -2,7 +2,7 @@
   --form-container-padding: 10px;
   --form-padding: 7px;
   --input-font-size: 1.5rem;
-  --very-darkbackground: #202020;
+  --very-dark-background: #202020;
   --dark-background: #2b2b2b;
   --light-background: #323232;
   --highlight: #3d3d3d;
@@ -34,7 +34,7 @@ body {
 }
 
 #pane-divider {
-  background-color: var(--very-darkbackground);
+  background-color: var(--very-dark-background);
   cursor: ew-resize;
 }
 
@@ -54,6 +54,14 @@ h1 {
   padding: 8px 0 0 8px;
   color: var(--accent-text);
   font-size: 2rem;
+}
+
+header {
+  border-bottom: var(--light-highlight) solid 2px;
+}
+
+header h1 {
+  margin: 5px;
 }
 
 .list-container {
