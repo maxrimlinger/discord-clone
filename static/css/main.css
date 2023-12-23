@@ -42,7 +42,7 @@ body {
   background-color: var(--accent);
 }
 
-.chat-pane {
+#chat-pane {
   background-color: var(--light-background);
   height: 100vh;
   position: relative;
@@ -50,13 +50,9 @@ body {
   flex-direction: column;
 }
 
-h1,
-h4 {
+h1 {
   padding: 8px 0 0 8px;
   color: var(--accent-text);
-}
-
-h1 {
   font-size: 2rem;
 }
 
@@ -181,10 +177,6 @@ button {
 
 .channel-pane a:hover {
   text-decoration: underline;
-}
-
-h2 {
-  color: var(--accent-text);
 }
 
 .profile-picture {

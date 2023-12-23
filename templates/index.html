@@ -1,13 +1,10 @@
-{% extends 'base.html' %} {% block head %}
-<title>Discord Clone</title>
-{% endblock %} {% block body %}
+{% extends 'base.html' %} {% block head %}{% endblock %} {% block body %}
 <div id="content">
   <div class="channel-pane">
     <h1>Channels</h1>
     <div class="list-container">
       <ul class="list">
-        {% if channels|length < 1 %} <li>No Channels</li>
-          {% else %}
+        {% if channels|length < 1 %}<li>No Channels</li>{% else %}
           {% for channel in channels %}
           {% if channel.name == selected_channel_name %}
           <li class="item selected-item">
@@ -34,7 +31,7 @@
     </div>
   </div>
   <div id="pane-divider"></div>
-  <div class="chat-pane">
+  <div id="chat-pane">
     <header>
       <h1>{{ selected_channel_name }}</h1>
     </header>
@@ -46,8 +43,9 @@
           <li class="item message">
             <img src="{{ message.author_profile_picture }}" class="profile-picture" />
             <div class="item-content">
-              <div class="message-info"><span class="item-text author-text">{{ message.author_first_name }} {{ message.author_last_name }}</span><span
-                  class="item-text date-text">{{message.datetime_sent}}</span></div>
+              <div class="message-info"><span class="item-text author-text">{{ message.author_first_name }} {{
+                  message.author_last_name }}</span><span class="item-text date-text">{{message.datetime_sent}}</span>
+              </div>
               <p class="item-text">
                 {{ message.content }}
               </p>

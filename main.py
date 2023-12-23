@@ -1,15 +1,19 @@
 import os
 import json
 import requests
-from oauthlib.oauth2 import WebApplicationClient
-from flask import Flask, render_template, url_for, request, redirect, abort
+from flask import Flask, render_template, request, redirect
+import utils
+
+# Google authentication
 from google.cloud import datastore
+from oauthlib.oauth2 import WebApplicationClient
 from flask_login import LoginManager, current_user, login_required, login_user, logout_user
-from datetime import datetime, timezone, timedelta, date
-import pytz
+
+# handling datetime sent for messages
+from datetime import datetime, timezone
 
 app = Flask(__name__)
-app.secret_key = os.urandom(12).hex()
+app.secret_key = os.urandom(12).hex() # needed for SSL
 db = datastore.Client()
 
 login_manager = LoginManager()
@@ -28,18 +32,16 @@ def load_user(user_id):
     )
     return user
 
-def get_client_secrets():
-    file = open("auth\client_secrets.json")
-    data = json.load(file)
-    file.close()
-    return data["web"]
-
-client_secrets = get_client_secrets()
+# globals for various google auth references
+client_secrets = utils.get_client_secrets()
 auth_client = WebApplicationClient(client_secrets["client_id"])
 GOOGLE_DISCOVERY_URL = "https://accounts.google.com/.well-known/openid-configuration"
 USERINFO_ENDPOINT = requests.get(GOOGLE_DISCOVERY_URL).json()["userinfo_endpoint"]
 
 class User():
+    """
+    For use with Flask-Login which holds on to an object as the `current_user`.
+    """
     def __init__(self, id, first_name, last_name, email, profile_picture, last_login):
         self.id = id
         self.first_name = first_name
@@ -56,57 +58,20 @@ class User():
     def get_id(self):
         return str(self.id)
 
-    
-
 class Message():
-    """Represents a chat message. This class does the heavy lifting of
+    """
+    Represents a chat message. This class does the heavy lifting of
     converting the date and time the message was sent to a more readible format
-    for the frontend.
+    for the front end.
     """
     def __init__(self, channel, content, datetime_sent, message_id, author_first_name, author_last_name, author_profile_picture):
         self.channel = channel
         self.content = content
-        self.datetime_sent = get_relational_datetime(datetime_sent)
+        self.datetime_sent = utils.get_relational_datetime(datetime_sent)
         self.id = message_id
         self.author_first_name = author_first_name
         self.author_last_name = author_last_name
         self.author_profile_picture = author_profile_picture
-
-def get_relational_datetime(dt_message):
-    now = datetime.now(timezone.utc)
-    time_since_message = now - dt_message
-    tz = pytz.timezone("America/New_York") # TODO change this with user settings
-    local_dt_message = dt_message.astimezone(tz)
-    local_now = now.astimezone(tz)
-
-    dt_10_seconds_ago = now - timedelta(seconds=10)
-    dt_1_minute_ago = now - timedelta(minutes=1)
-    dt_2_minutes_ago = now - timedelta(minutes=2)
-    dt_1_hour_ago = now - timedelta(hours=1)
-    dt_2_hours_ago = now - timedelta(hours=2)
-
-    # local to user
-    dt_beginning_of_today = datetime(local_now.year, local_now.month, local_now.day, tzinfo=tz)
-    dt_beginning_of_yesterday = dt_beginning_of_today - timedelta(days=1)
-    days_since_message = dt_beginning_of_today - local_dt_message + timedelta(days=1)
-
-    if dt_message > dt_10_seconds_ago:
-        return "Now"
-    if dt_message > dt_1_minute_ago:
-        return "< 1 minute ago"
-    if dt_message > dt_2_minutes_ago:
-        return "1 minute ago"
-    if dt_message > dt_1_hour_ago:
-        return str(time_since_message.seconds // 60) + " minutes ago"
-    if dt_message > dt_2_hours_ago:
-        return "1 hour ago"
-    
-    if local_dt_message > dt_beginning_of_today:
-        return str(time_since_message.seconds // 3600) + " hours ago"
-    if local_dt_message > dt_beginning_of_yesterday:
-        return "Yesterday" 
-    else:
-        return str(days_since_message.days) + " days ago"
 
 def channel_query():
     query = db.query(kind="channel")
@@ -242,7 +207,7 @@ def channel(selected_channel_name):
 
 @app.route("/add-channel", methods=["POST", "GET"])
 @login_required
-def add_channel(): # TODO currently doesn't check if channel name already exists, just overwrites
+def add_channel():
     if request.method == "POST":
         channel_name = request.form["channel-name"]
 

@@ -3,3 +3,4 @@ execpolicy.txt
 static/adobe/
 ssl/
 auth/
+.vscode/
