@@ -64,10 +64,10 @@ class Message():
     converting the date and time the message was sent to a more readible format
     for the front end.
     """
-    def __init__(self, channel, content, datetime_sent, message_id, author_first_name, author_last_name, author_profile_picture):
-        self.channel = channel
+    def __init__(self, content, datetime_sent, message_id, author_first_name, author_last_name, author_profile_picture):
         self.content = content
-        self.datetime_sent = utils.get_relational_datetime(datetime_sent)
+        self.relational_datetime = utils.get_relational_datetime(datetime_sent)
+        self.datetime = utils.get_formatted_datetime(datetime_sent)
         self.id = message_id
         self.author_first_name = author_first_name
         self.author_last_name = author_last_name
@@ -158,7 +158,7 @@ def channel_index():
     return redirect("/channel/" + first_channel["name"])
 
 @app.route("/channel/<selected_channel_name>/", methods=["POST", "GET"])
-@login_required
+# @login_required FIXME
 def channel(selected_channel_name):
     if request.method == "POST":
         message_content = request.form["content"]
@@ -186,23 +186,48 @@ def channel(selected_channel_name):
         message_query = db.query(kind="message")
         message_query.add_filter("channel", "=", selected_channel_name)
         message_query.order = ["datetime_sent"]
-        messages = list(message_query.fetch())
+        db_messages = list(message_query.fetch())
+
+        # saves already known author info to speed up load times
+        # dict of info inside a dict of authors
+        author_cache = {}
+
         formatted_messages = []
-        for message in messages:
-            author = db.get(db.key("user", message["author"]))
-            formatted_message = Message(message["channel"],
-                                        message["content"], 
-                                        message["datetime_sent"], 
-                                        message.id,
-                                        author["first_name"],
-                                        author["last_name"],
-                                        author["picture"])
+        prev_author = None
+        for message in db_messages:
+            if message["author"] not in author_cache:
+                db_author = db.get(db.key("user", message["author"]))
+                author_cache[message["author"]] = db_author
+            if message["author"] != prev_author:
+                formatted_message = Message(
+                    message["content"], 
+                    message["datetime_sent"], 
+                    message.id,
+                    author_cache[message["author"]]["first_name"],
+                    author_cache[message["author"]]["last_name"],
+                    author_cache[message["author"]]["picture"]
+                )
+            else:
+                # no author info in the object tells the template to render the 
+                # message without author info
+                formatted_message = Message(
+                    message["content"], 
+                    message["datetime_sent"], 
+                    message.id,
+                    None,
+                    None,
+                    None
+                )
             formatted_messages.append(formatted_message)
+            prev_author = message["author"]
         return render_template(
             "index.html", 
-            selected_channel_name=selected_channel_name, channels=channels, 
-            messages=formatted_messages, user_first_name=current_user.first_name,
-            user_last_name=current_user.last_name, user_profile_picture=current_user.profile_picture
+            selected_channel_name=selected_channel_name, 
+            channels=channels, 
+            messages=formatted_messages, 
+            # user_first_name=current_user.first_name,
+            # user_last_name=current_user.last_name,
+            # user_profile_picture=current_user.profile_picture
         )
 
 @app.route("/add-channel", methods=["POST", "GET"])

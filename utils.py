@@ -43,3 +43,13 @@ def get_relational_datetime(dt_message):
         return "Yesterday" 
     else:
         return str(days_since_message.days) + " days ago"
+    
+def get_formatted_datetime(dt):
+    tz = pytz.timezone("America/New_York") # this could potentially be changed
+    local_dt = dt.astimezone(tz) # localize
+    formatted_dt = local_dt.strftime("%I:%M %p") # format
+    print(dt.hour)
+    if 1 <= dt.hour <= 9 or 13 < dt.hour < 21:
+        print("trimmed")
+        formatted_dt = formatted_dt[1:] # trim 0 padded hour
+    return formatted_dt

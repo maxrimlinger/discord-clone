@@ -32,20 +32,29 @@
   </div>
   <div id="pane-divider"></div>
   <div id="chat-pane">
-    <header>
+    <header> <!-- h1 inside header for future plans of adding profile pic in corner -->
       <h1>{{ selected_channel_name }}</h1>
     </header>
     <div class="list-container" id="chat-list-container">
-      <ul class="list">
-        {% if messages|length < 1 %} <li class="no-messages-text">There are no messages.</li>
-          {% else %}
+      <ol class="list">
+        {% if messages|length < 1 %}
+          <li class="no-messages-text">There are no messages.</li>
+        {% else %}
           {% for message in messages %}
-          <li class="item message">
-            <img src="{{ message.author_profile_picture }}" class="profile-picture" />
-            <div class="item-content">
-              <div class="message-info"><span class="item-text author-text">{{ message.author_first_name }} {{
-                  message.author_last_name }}</span><span class="item-text date-text">{{message.datetime_sent}}</span>
+            <li class="item message">
+            {% if message.author_first_name != None %}
+              <img src="{{ message.author_profile_picture }}" class="profile-picture" />
+            {% else %}
+              <div>
+                <p class="hidden-datetime">{{ message.datetime }}</p>
               </div>
+            {% endif %}
+            <div class="item-content">
+              {% if message.author_first_name != None %}
+              <div class="message-info"><span class="item-text author-text">{{ message.author_first_name }} {{
+                message.author_last_name }}</span><span class="item-text date-text">{{ message.relational_datetime }}</span>
+              </div>
+              {% endif %}
               <p class="item-text">
                 {{ message.content }}
               </p>
@@ -54,8 +63,8 @@
                 class="delete-image" /></a>
           </li>
           {% endfor %}
-          {% endif %}
-      </ul>
+        {% endif %}
+        </ol>
     </div>
     <div class="form-container">
       <form action="/channel/{{ selected_channel_name }}" method="POST">
