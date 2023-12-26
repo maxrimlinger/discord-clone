@@ -45,7 +45,7 @@
             {% if message.author_first_name != None %}
               <img src="{{ message.author_profile_picture }}" class="profile-picture" />
             {% else %}
-              <div>
+              <div class="hidden-datetime-wrapper">
                 <p class="hidden-datetime">{{ message.datetime }}</p>
               </div>
             {% endif %}
