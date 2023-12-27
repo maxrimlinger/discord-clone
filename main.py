@@ -3,6 +3,7 @@ import json
 import requests
 from flask import Flask, render_template, request, redirect
 import utils
+import time
 
 # Google authentication
 from google.cloud import datastore
@@ -127,8 +128,6 @@ def callback():
         return "User email not available or not verified by Google.", 400
 
     now = datetime.now(timezone.utc)
-
-    print(userinfo_response["sub"])
 
     user = User(
         userinfo_response["sub"], userinfo_response["given_name"], 
@@ -266,7 +265,6 @@ def add_channel():
 def delete_message(id):
     db.delete(db.key("message", id))
     redirect_channel = request.args.get("redirect")
-    print(type(redirect_channel))
     return redirect("/channel/" + redirect_channel)
 
 @app.route("/delete-channel/<int:id>/")
