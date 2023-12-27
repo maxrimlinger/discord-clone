@@ -1,0 +1,25 @@
+:root {
+    --form-container-padding: 10px;
+    --form-padding: 7px;
+    --input-font-size: 1.5rem;
+    --very-dark-background: #202020;
+    --dark-background: #2b2b2b;
+    --light-background: #323232;
+    --highlight: #3d3d3d;
+    --light-highlight: #434343;
+    --accent-text: #efefef;
+    --dark-text: #121212;
+    --text: #d6d6d6;
+    --accent: #7a00cc;
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: sans-serif;
+    color: var(--text);
+  }
