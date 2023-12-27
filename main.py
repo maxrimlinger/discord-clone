@@ -10,7 +10,7 @@ from oauthlib.oauth2 import WebApplicationClient
 from flask_login import LoginManager, current_user, login_required, login_user, logout_user
 
 # handling datetime sent for messages
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 app = Flask(__name__)
 app.secret_key = os.urandom(12).hex() # needed for SSL
@@ -67,6 +67,7 @@ class Message():
     def __init__(self, content, datetime_sent, message_id, author_first_name, author_last_name, author_profile_picture):
         self.content = content
         self.relational_datetime = utils.get_relational_datetime(datetime_sent)
+        self.time = utils.get_formatted_time(datetime_sent)
         self.datetime = utils.get_formatted_datetime(datetime_sent)
         self.id = message_id
         self.author_first_name = author_first_name
@@ -158,7 +159,7 @@ def channel_index():
     return redirect("/channel/" + first_channel["name"])
 
 @app.route("/channel/<selected_channel_name>/", methods=["POST", "GET"])
-# @login_required FIXME
+@login_required
 def channel(selected_channel_name):
     if request.method == "POST":
         message_content = request.form["content"]
@@ -194,11 +195,15 @@ def channel(selected_channel_name):
 
         formatted_messages = []
         prev_author = None
+        prev_datetime = None
         for message in db_messages:
             if message["author"] not in author_cache:
                 db_author = db.get(db.key("user", message["author"]))
                 author_cache[message["author"]] = db_author
-            if message["author"] != prev_author:
+            if (
+                message["author"] != prev_author or
+                message["datetime_sent"] - prev_datetime > timedelta(minutes=10)
+            ):
                 formatted_message = Message(
                     message["content"], 
                     message["datetime_sent"], 
@@ -220,6 +225,7 @@ def channel(selected_channel_name):
                 )
             formatted_messages.append(formatted_message)
             prev_author = message["author"]
+            prev_datetime = message["datetime_sent"]
         return render_template(
             "index.html", 
             selected_channel_name=selected_channel_name, 

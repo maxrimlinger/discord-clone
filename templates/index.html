@@ -46,13 +46,13 @@
               <img src="{{ message.author_profile_picture }}" class="profile-picture" />
             {% else %}
               <div class="hidden-datetime-wrapper">
-                <p class="hidden-datetime">{{ message.datetime }}</p>
+                <p class="hidden-datetime" title="{{ message.datetime }}">{{ message.time }}</p>
               </div>
             {% endif %}
             <div class="item-content">
               {% if message.author_first_name != None %}
               <div class="message-info"><span class="item-text author-text">{{ message.author_first_name }} {{
-                message.author_last_name }}</span><span class="item-text date-text">{{ message.relational_datetime }}</span>
+                message.author_last_name }}</span><span class="item-text date-text" title="{{ message.datetime }}">{{ message.relational_datetime }}</span>
               </div>
               {% endif %}
               <p class="item-text">
