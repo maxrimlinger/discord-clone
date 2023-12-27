@@ -214,7 +214,7 @@ def channel(selected_channel_name):
                 )
             else:
                 # no author info in the object tells the template to render the 
-                # message without author info
+                # message grouped with previous messages
                 formatted_message = Message(
                     message["content"], 
                     message["datetime_sent"], 
