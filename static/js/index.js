@@ -5,15 +5,6 @@ function auto_scroll_bottom() {
     }
 }
 
-function show_ellipses_menu(element) {
-    const dialog = document.querySelector("#chat-list-container dialog");
-    if (dialog.open) {
-        dialog.close();
-    } else {
-        dialog.show();
-    }
-}
-
 function m_move_divider(e) {
     e.preventDefault();
     const x = e.clientX;

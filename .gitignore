@@ -4,3 +4,4 @@ static/adobe/
 ssl/
 auth/
 .vscode/
+__pycache__/

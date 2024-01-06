@@ -4,10 +4,26 @@ body {
   width: 100vw;
 }
 
-.login {
-  width: 50%;
+.content {
+  width: 40rem;
+  text-align: center;
   margin: auto;
   position: relative;
   top: 50%;
   transform: translateY(-50%);
+}
+
+img {
+  width: 6rem;
+}
+
+h1 {
+  font-size: 3rem;
+  color: var(--accent-text);
+  margin-bottom: 50px;
+}
+
+.google-wrapper {
+  width: 40%;
+  margin: auto;
 }
