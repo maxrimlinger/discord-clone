@@ -6,21 +6,11 @@
 {% endblock %}
 {% block body %}
 <div class="content">
-  <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Discord Clone Logo">
+  <img class="logo" src="{{ url_for('static', filename='img/logo.png') }}" alt="Discord Clone Logo">
   <h1>Discord Clone</h1>
-  <div class="google-wrapper">
-    <!-- 
-    This Google sign-in button is purely cosmetic. It has been hijacked in 
-    login.js to redirect to /login. This is because the login flow I have already
-    implemented uses redirect instead of popout, and the official Google button
-    doesn't play nice with redirect mode.
-  -->
-    <div id="g_id_onload">
-    </div>
-    <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with"
-      data-shape="rectangular" data-logo_alignment="left">
-    </div>
-  </div>
+  <a class="login" href="/login">
+    <img class="google-logo" src="{{ url_for('static', filename='svg/google.svg') }}">
+    Log in with Google
+  </a>
 </div>
-<script src="{{ url_for('static', filename='js/login.js') }}"></script>
 {% endblock %}
