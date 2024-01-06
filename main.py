@@ -33,6 +33,10 @@ def load_user(user_id):
     )
     return user
 
+@login_manager.unauthorized_handler
+def unauthorized_callback():
+    return redirect('/')
+
 # globals for various google auth references
 client_secrets = utils.get_client_secrets()
 auth_client = WebApplicationClient(client_secrets["client_id"])

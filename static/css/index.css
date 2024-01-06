@@ -207,6 +207,7 @@ button {
 
 .space {
   margin-top: var(--inter-message-spacing);
+  margin-bottom: 5px;
   text-align: center;
   color: var(--faint-text);
 }
