@@ -18,9 +18,8 @@ month_to_str = {
 }
 
 def get_client_secrets():
-    file = open("auth\client_secrets.json")
-    data = json.load(file)
-    file.close()
+    with open("auth\client_secrets.json") as file:
+        data = json.load(file)
     return data["web"]
 
 def get_relational_datetime(dt_message):
