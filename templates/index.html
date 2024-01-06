@@ -10,21 +10,21 @@
       <ul class="list">
         {% if channels|length < 1 %}<li>No Channels</li>{% else %}
           {% for channel in channels %}
-          {% if channel.name == selected_channel_name %}
-          <li class="item selected-item">
-            <p class="item-content channel-content item-text">{{ channel.name }}</p><a
-              href="/delete-channel/{{ channel.id }}"><img
-                src="{{ url_for('static', filename='svg/close_button_icon.svg') }}" class="delete-image" /></a>
-          </li>
-          {% else %}
-          <li class="item">
-            <p class="item-content channel-content item-text"><a href="/channel/{{ channel.name }}">{{
-                channel.name }}</a></p><a href="/delete-channel/{{ channel.id }}" class="delete-button"><img
-                src="{{ url_for('static', filename='svg/close_button_icon.svg') }}" class="delete-image" /></a>
-          </li>
-          {% endif %}
+            {% if channel.name == selected_channel_name %}
+              <li class="item selected-item">
+                <p class="item-content channel-content item-text">{{ channel.name }}</p><a
+                  href="/delete-channel/{{ channel.id }}"><img
+                    src="{{ url_for('static', filename='svg/close_button_icon.svg') }}" class="delete-image" /></a>
+              </li>
+            {% else %}
+              <li class="item">
+                <p class="item-content channel-content item-text"><a href="/channel/{{ channel.name }}">{{
+                    channel.name }}</a></p><a href="/delete-channel/{{ channel.id }}" class="delete-button"><img
+                    src="{{ url_for('static', filename='svg/close_button_icon.svg') }}" class="delete-image" /></a>
+              </li>
+            {% endif %}
           {% endfor %}
-          {% endif %}
+        {% endif %}
       </ul>
     </div>
     <div class="form-container">
@@ -45,27 +45,37 @@
           <li class="no-messages-text">There are no messages.</li>
         {% else %}
           {% for message in messages %}
-            <li class="item message">
-            {% if message.author_first_name != None %}
-              <img src="{{ message.author_profile_picture }}" class="profile-picture" />
+            {% if message.space_date is defined %} 
+              <!-- indicates that this is a space, not a message -->
+              <p class="space">{{ message.space_date }}</p>
+              <hr>
             {% else %}
-              <div class="hidden-datetime-wrapper">
-                <p class="hidden-datetime" title="{{ message.datetime }}">{{ message.time }}</p>
-              </div>
-            {% endif %}
-            <div class="item-content">
+              <li class="item
+                {% if message.author_profile_picture != None %}
+                  first-message-in-group
+                {% endif %}
+              ">
               {% if message.author_first_name != None %}
-              <div class="message-info"><span class="item-text author-text">{{ message.author_first_name }} {{
-                message.author_last_name }}</span><span class="item-text date-text" title="{{ message.datetime }}">{{ message.relational_datetime }}</span>
-              </div>
+                <img src="{{ message.author_profile_picture }}" class="profile-picture" />
+              {% else %}
+                <div class="hidden-datetime-wrapper">
+                  <p class="hidden-datetime" title="{{ message.datetime }}">{{ message.time }}</p>
+                </div>
               {% endif %}
-              <p class="item-text">
-                {{ message.content }}
-              </p>
-            </div><a href="/delete-message/{{ message.id }}?redirect={{ selected_channel_name }}"
-              class="delete-button"><img src="{{ url_for('static', filename='svg/close_button_icon.svg') }}"
-                class="delete-image" /></a>
-          </li>
+              <div class="item-content">
+                {% if message.author_first_name != None %}
+                  <div class="message-info"><span class="item-text author-text">{{ message.author_first_name }} {{
+                    message.author_last_name }}</span><span class="item-text date-text" title="{{ message.datetime }}">{{ message.relational_datetime }}</span>
+                  </div>
+                {% endif %}
+                <p class="item-text">
+                  {{ message.content }}
+                </p>
+              </div><a href="/delete-message/{{ message.id }}?redirect={{ selected_channel_name }}"
+                class="delete-button"><img src="{{ url_for('static', filename='svg/close_button_icon.svg') }}"
+                  class="delete-image" /></a>
+              </li>
+            {% endif %}
           {% endfor %}
         {% endif %}
         </ol>

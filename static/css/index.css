@@ -1,3 +1,7 @@
+:root {
+  --inter-message-spacing: 10px;
+}
+
 * {
   line-height: 1.2;
 }
@@ -78,6 +82,10 @@ header h1 {
   font-size: 1.3rem;
   word-break: break-word;
   color: var(--text);
+}
+
+.first-message-in-group {
+  margin-top: var(--inter-message-spacing);
 }
 
 .message-info {
@@ -195,4 +203,15 @@ button {
 
 .no-messages-text {
   color: var(--accent-text);
+}
+
+.space {
+  margin-top: var(--inter-message-spacing);
+  text-align: center;
+  color: var(--faint-text);
+}
+
+hr {
+  border-style: solid;
+  border-color: var(--dark-background);
 }

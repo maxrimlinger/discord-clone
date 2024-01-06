@@ -3,7 +3,7 @@ import json
 import requests
 from flask import Flask, render_template, request, redirect
 import utils
-import time
+import pytz
 
 # Google authentication
 from google.cloud import datastore
@@ -74,6 +74,11 @@ class Message():
         self.author_first_name = author_first_name
         self.author_last_name = author_last_name
         self.author_profile_picture = author_profile_picture
+
+class Space():
+    """Represents a space in between messages marking the next day."""
+    def __init__(self, space_date):
+        self.space_date = space_date
 
 def channel_query():
     query = db.query(kind="channel")
@@ -195,10 +200,19 @@ def channel(selected_channel_name):
         formatted_messages = []
         prev_author = None
         prev_datetime = None
+        tz = pytz.timezone("America/New_York") # this could potentially be changed
         for message in db_messages:
             if message["author"] not in author_cache:
                 db_author = db.get(db.key("user", message["author"]))
                 author_cache[message["author"]] = db_author
+            local_message_dt = message["datetime_sent"].astimezone(tz)
+            if prev_datetime != None:
+                local_prev_dt = prev_datetime.astimezone(tz)
+                if local_message_dt.day != local_prev_dt.day:
+                    # add spaces that tell the date when the day changes
+                    formatted_messages.append(Space(utils.get_formatted_date(local_message_dt)))
+            else:
+                formatted_messages.append(Space(utils.get_formatted_date(local_message_dt)))
             if (
                 message["author"] != prev_author or
                 message["datetime_sent"] - prev_datetime > timedelta(minutes=10)
@@ -225,6 +239,7 @@ def channel(selected_channel_name):
             formatted_messages.append(formatted_message)
             prev_author = message["author"]
             prev_datetime = message["datetime_sent"]
+        print(formatted_messages)
         return render_template(
             "index.html", 
             selected_channel_name=selected_channel_name, 

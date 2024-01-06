@@ -87,15 +87,22 @@ def get_formatted_time(dt):
     )
     return time
 
-def get_formatted_datetime(dt):
+def get_formatted_date(dt):
     tz = pytz.timezone("America/New_York") # this could potentially be changed
     local_dt = dt.astimezone(tz) # localize
     now = datetime.now(timezone.utc)
-    time = "{month} {day}{day_suffix}{year}, {hour}:{minute}:{second} {am_pm}".format(
+    date = "{month} {day}{day_suffix}{year}".format(
         month=month_to_str[local_dt.month],
         day=local_dt.day,
         day_suffix=get_day_suffix(local_dt.day),
-        year=f" {local_dt.year}" if now.year != local_dt.year else "",
+        year=f", {local_dt.year}" if now.year != local_dt.year else ""
+    )
+    return date
+
+def get_formatted_datetime(dt):
+    tz = pytz.timezone("America/New_York") # this could potentially be changed
+    local_dt = dt.astimezone(tz) # localize
+    time = get_formatted_date(dt) + " {hour}:{minute}:{second} {am_pm}".format(
         hour=to_12hr(local_dt.hour),
         minute=f"{local_dt.minute:02}",
         second=f"{local_dt.second:02}",
