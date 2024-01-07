@@ -48,7 +48,6 @@
             {% if message.space_date is defined %} 
               <!-- indicates that this is a space, not a message -->
               <p class="space">{{ message.space_date }}</p>
-              <hr>
             {% else %}
               <li class="item
                 {% if message.author_profile_picture != None %}

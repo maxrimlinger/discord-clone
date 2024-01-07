@@ -212,7 +212,15 @@ button {
   color: var(--faint-text);
 }
 
-hr {
-  border-style: solid;
-  border-color: var(--dark-background);
+.space:before, .space:after {
+  content: "";
+  display: inline-block;
+  width: 50%;
+  margin: 0 .5em 0 -55%;
+  vertical-align: middle;
+  border-bottom: 1px solid;
+}
+
+.space:after {
+  margin: 0 -55% 0 .5em;
 }
