@@ -224,3 +224,8 @@ button {
 .space:after {
   margin: 0 -55% 0 .5em;
 }
+
+#message-dialog {
+  position: fixed;
+  right: 0;
+}

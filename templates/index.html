@@ -40,6 +40,7 @@
       <h1>{{ selected_channel_name }}</h1>
     </header>
     <div class="list-container" id="chat-list-container">
+      <dialog id="message-dialog">TEST</dialog>
       <ol class="list">
         {% if messages|length < 1 %}
           <li class="no-messages-text">There are no messages.</li>
@@ -53,7 +54,7 @@
                 {% if message.author_profile_picture != None %}
                   first-message-in-group
                 {% endif %}
-              ">
+              " id="{{ message.id }}-message">
               {% if message.author_first_name != None %}
                 <img src="{{ message.author_profile_picture }}" class="profile-picture" />
               {% else %}
@@ -70,9 +71,10 @@
                 <p class="item-text">
                   {{ message.content }}
                 </p>
-              </div><a href="/delete-message/{{ message.id }}?redirect={{ selected_channel_name }}"
-                class="delete-button"><img src="{{ url_for('static', filename='svg/close_button_icon.svg') }}"
-                  class="delete-image" /></a>
+              </div>
+              <button style="color:white;" class="options-button" id="{{ message.id }}-options-button">Edit</button>
+              <!-- <a href="/delete-message/{{ message.id }}?redirect={{ selected_channel_name }}" class="delete-button">
+                <img src="{{ url_for('static', filename='svg/close_button_icon.svg') }}" class="delete-image"/></a> -->
               </li>
             {% endif %}
           {% endfor %}
