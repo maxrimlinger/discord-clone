@@ -69,12 +69,13 @@ class Message():
     converting the date and time the message was sent to a more readible format
     for the front end.
     """
-    def __init__(self, content, datetime_sent, message_id, author_first_name, author_last_name, author_profile_picture):
+    def __init__(self, content, datetime_sent, message_id, author_id, author_first_name, author_last_name, author_profile_picture):
         self.content = content
         self.relational_datetime = utils.get_relational_datetime(datetime_sent)
         self.time = utils.get_formatted_time(datetime_sent)
         self.datetime = utils.get_formatted_datetime(datetime_sent)
         self.id = message_id
+        self.author_id = author_id
         self.author_first_name = author_first_name
         self.author_last_name = author_last_name
         self.author_profile_picture = author_profile_picture
@@ -225,6 +226,7 @@ def channel(selected_channel_name):
                     message["content"], 
                     message["datetime_sent"], 
                     message.id,
+                    message["author"],
                     author_cache[message["author"]]["first_name"],
                     author_cache[message["author"]]["last_name"],
                     author_cache[message["author"]]["picture"]
@@ -236,6 +238,7 @@ def channel(selected_channel_name):
                     message["content"], 
                     message["datetime_sent"], 
                     message.id,
+                    message["author"],
                     None,
                     None,
                     None
@@ -243,12 +246,12 @@ def channel(selected_channel_name):
             formatted_messages.append(formatted_message)
             prev_author = message["author"]
             prev_datetime = message["datetime_sent"]
-        print(formatted_messages)
         return render_template(
             "index.html", 
             selected_channel_name=selected_channel_name, 
             channels=channels, 
             messages=formatted_messages, 
+            current_user=current_user.id,
             # user_first_name=current_user.first_name,
             # user_last_name=current_user.last_name,
             # user_profile_picture=current_user.profile_picture

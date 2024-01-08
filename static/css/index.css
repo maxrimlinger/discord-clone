@@ -68,7 +68,7 @@ header h1 {
   background-color: var(--light-highlight);
 }
 
-.item:hover .delete-image {
+.item:hover .option-image {
   opacity: 1;
 }
 
@@ -113,7 +113,7 @@ header h1 {
   background-color: var(--highlight);
 }
 
-.delete-image {
+.option-image {
   opacity: 0;
   width: 1.2rem;
   height: 100%;
@@ -121,7 +121,7 @@ header h1 {
   margin-left: 0.3rem;
 }
 
-.delete-button:focus .delete-image {
+.option-button:focus .option-image {
   opacity: 1;
 }
 

@@ -14,13 +14,13 @@
               <li class="item selected-item">
                 <p class="item-content channel-content item-text">{{ channel.name }}</p><a
                   href="/delete-channel/{{ channel.id }}"><img
-                    src="{{ url_for('static', filename='svg/close_button_icon.svg') }}" class="delete-image" /></a>
+                    src="{{ url_for('static', filename='svg/close.svg') }}" class="option-image" /></a>
               </li>
             {% else %}
               <li class="item">
                 <p class="item-content channel-content item-text"><a href="/channel/{{ channel.name }}">{{
-                    channel.name }}</a></p><a href="/delete-channel/{{ channel.id }}" class="delete-button"><img
-                    src="{{ url_for('static', filename='svg/close_button_icon.svg') }}" class="delete-image" /></a>
+                    channel.name }}</a></p><a href="/delete-channel/{{ channel.id }}" class="option-button"><img
+                    src="{{ url_for('static', filename='svg/close.svg') }}" class="option-image" /></a>
               </li>
             {% endif %}
           {% endfor %}
@@ -30,7 +30,7 @@
     <div class="form-container">
       <form action="/add-channel" method="POST">
         <input type="text" name="channel-name" placeholder="Add Channel" class="textbox" /><input type="image"
-          alt="Submit" value="Add Channel" src="{{ url_for('static', filename='svg/send_button_icon.svg') }}" />
+          alt="Submit" value="Add Channel" src="{{ url_for('static', filename='svg/send.svg') }}" />
       </form>
     </div>
   </div>
@@ -40,7 +40,6 @@
       <h1>{{ selected_channel_name }}</h1>
     </header>
     <div class="list-container" id="chat-list-container">
-      <dialog id="message-dialog">TEST</dialog>
       <ol class="list">
         {% if messages|length < 1 %}
           <li class="no-messages-text">There are no messages.</li>
@@ -72,9 +71,12 @@
                   {{ message.content }}
                 </p>
               </div>
-              <button style="color:white;" class="options-button" id="{{ message.id }}-options-button">Edit</button>
-              <!-- <a href="/delete-message/{{ message.id }}?redirect={{ selected_channel_name }}" class="delete-button">
-                <img src="{{ url_for('static', filename='svg/close_button_icon.svg') }}" class="delete-image"/></a> -->
+              {% if message.author_id == current_user %}
+              <a href="/edit-message/{{ message.id }}?redirect={{ selected_channel_name }}" class="option-button">
+                <img src="{{ url_for('static', filename='svg/edit.svg') }}" class="option-image"/></a>
+              <a href="/delete-message/{{ message.id }}?redirect={{ selected_channel_name }}" class="option-button">
+                <img src="{{ url_for('static', filename='svg/close.svg') }}" class="option-image"/></a>
+              {% endif %}
               </li>
             {% endif %}
           {% endfor %}
@@ -84,7 +86,7 @@
     <div class="form-container">
       <form action="/channel/{{ selected_channel_name }}" method="POST">
         <input type="text" name="content" placeholder="Start typing..." class="textbox" /><input type="image"
-          alt="Submit" value="Add Message" src="{{ url_for('static', filename='svg/send_button_icon.svg') }}" />
+          alt="Submit" value="Add Message" src="{{ url_for('static', filename='svg/send.svg') }}" />
       </form>
     </div>
   </div>
