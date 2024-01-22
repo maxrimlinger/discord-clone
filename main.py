@@ -285,7 +285,11 @@ def add_channel():
 @app.route("/delete-message/<int:id>")
 @login_required
 def delete_message(id):
+    message = db.get(db.key("message", id))
+    if message["author"] != current_user.id:
+        return "You do not have permission to delete this message.", 403
     db.delete(db.key("message", id))
+    
     redirect_channel = request.args.get("redirect")
     return redirect("/channel/" + redirect_channel)
 
