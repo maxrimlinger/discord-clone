@@ -1,92 +1,137 @@
-{% extends 'base.html' %}
-{% block head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
-{% endblock %}
-{% block body %}
+{% extends 'base.html' %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/index.css') }}"
+/>
+{% endblock %} {% block body %}
 <div id="content">
   <div class="channel-pane">
     <h1>Channels</h1>
     <div class="list-container">
       <ul class="list">
-        {% if channels|length < 1 %}<li>No Channels</li>{% else %}
-          {% for channel in channels %}
-            {% if channel.name == selected_channel_name %}
-              <li class="item selected-item">
-                <p class="item-content channel-content item-text">{{ channel.name }}</p><a
-                  href="/delete-channel/{{ channel.id }}"><img
-                    src="{{ url_for('static', filename='svg/close.svg') }}" class="option-image" /></a>
-              </li>
-            {% else %}
-              <li class="item">
-                <p class="item-content channel-content item-text"><a href="/channel/{{ channel.name }}">{{
-                    channel.name }}</a></p><a href="/delete-channel/{{ channel.id }}" class="option-button"><img
-                    src="{{ url_for('static', filename='svg/close.svg') }}" class="option-image" /></a>
-              </li>
-            {% endif %}
-          {% endfor %}
-        {% endif %}
+        {% if channels|length < 1 %}
+        <li>No Channels</li>
+        {% else %} {% for channel in channels %} {% if channel.name ==
+        selected_channel_name %}
+        <li class="item selected-item">
+          <p class="item-content channel-content item-text">
+            {{ channel.name }}
+          </p>
+          <a href="/delete-channel/{{ channel.id }}"
+            ><img
+              src="{{ url_for('static', filename='svg/close.svg') }}"
+              class="option-image"
+          /></a>
+        </li>
+        {% else %}
+        <li class="item">
+          <p class="item-content channel-content item-text">
+            <a href="/channel/{{ channel.name }}">{{ channel.name }}</a>
+          </p>
+          <a href="/delete-channel/{{ channel.id }}" class="option-button"
+            ><img
+              src="{{ url_for('static', filename='svg/close.svg') }}"
+              class="option-image"
+          /></a>
+        </li>
+        {% endif %} {% endfor %} {% endif %}
       </ul>
     </div>
     <div class="form-container">
-      <form action="/add-channel" method="POST">
-        <input type="text" name="channel-name" placeholder="Add Channel" class="textbox" /><input type="image"
-          alt="Submit" value="Add Channel" src="{{ url_for('static', filename='svg/send.svg') }}" />
+      <form action="/channel" method="POST">
+        <input
+          type="text"
+          name="channel-name"
+          placeholder="Add Channel"
+          class="textbox"
+        /><input
+          type="image"
+          alt="Submit"
+          value="Add Channel"
+          src="{{ url_for('static', filename='svg/send.svg') }}"
+        />
       </form>
     </div>
   </div>
   <div id="pane-divider"></div>
   <div id="chat-pane">
-    <header> <!-- h1 inside header for future plans of adding profile pic in corner -->
+    <header>
+      <!-- h1 inside header for future plans of adding profile pic in corner -->
       <h1>{{ selected_channel_name }}</h1>
     </header>
     <div class="list-container" id="chat-list-container">
       <ol class="list">
         {% if messages|length < 1 %}
-          <li class="no-messages-text">There are no messages.</li>
+        <li class="no-messages-text">There are no messages.</li>
+        {% else %} {% for message in messages %} {% if message.space_date is
+        defined %}
+        <!-- indicates that this is a space, not a message -->
+        <p class="space">{{ message.space_date }}</p>
         {% else %}
-          {% for message in messages %}
-            {% if message.space_date is defined %} 
-              <!-- indicates that this is a space, not a message -->
-              <p class="space">{{ message.space_date }}</p>
-            {% else %}
-              <li class="item
-                {% if message.author_profile_picture != None %}
-                  first-message-in-group
-                {% endif %}
-              " id="{{ message.id }}-message">
-              {% if message.author_first_name != None %}
-                <img src="{{ message.author_profile_picture }}" class="profile-picture" />
-              {% else %}
-                <div class="hidden-datetime-wrapper">
-                  <p class="hidden-datetime" title="{{ message.datetime }}">{{ message.time }}</p>
-                </div>
-              {% endif %}
-              <div class="item-content">
-                {% if message.author_first_name != None %}
-                  <div class="message-info"><span class="item-text author-text">{{ message.author_first_name }} {{
-                    message.author_last_name }}</span><span class="item-text date-text" title="{{ message.datetime }}">{{ message.relational_datetime }}</span>
-                  </div>
-                {% endif %}
-                <p class="item-text">
-                  {{ message.content }}
-                </p>
-              </div>
-              {% if message.author_id == current_user %}
-              <a href="/edit-message/{{ message.id }}?redirect={{ selected_channel_name }}" class="option-button">
-                <img src="{{ url_for('static', filename='svg/edit.svg') }}" class="option-image"/></a>
-              <a href="/delete-message/{{ message.id }}?redirect={{ selected_channel_name }}" class="option-button">
-                <img src="{{ url_for('static', filename='svg/close.svg') }}" class="option-image"/></a>
-              {% endif %}
-              </li>
+        <li
+          class="item {% if message.author_profile_picture != None %} first-message-in-group {% endif %}"
+          id="{{ message.id }}-message"
+        >
+          {% if message.author_first_name != None %}
+          <img
+            src="{{ message.author_profile_picture }}"
+            class="profile-picture"
+          />
+          {% else %}
+          <div class="hidden-datetime-wrapper">
+            <p class="hidden-datetime" title="{{ message.datetime }}">
+              {{ message.time }}
+            </p>
+          </div>
+          {% endif %}
+          <div class="item-content">
+            {% if message.author_first_name != None %}
+            <div class="message-info">
+              <span class="item-text author-text"
+                >{{ message.author_first_name }} {{ message.author_last_name
+                }}</span
+              ><span class="item-text date-text" title="{{ message.datetime }}"
+                >{{ message.relational_datetime }}</span
+              >
+            </div>
             {% endif %}
-          {% endfor %}
-        {% endif %}
-        </ol>
+            <p class="item-text">{{ message.content }}</p>
+          </div>
+          {% if message.author_id == current_user %}
+          <a
+            href="/edit-message/{{ message.id }}?redirect={{ selected_channel_name }}"
+            class="option-button"
+          >
+            <img
+              src="{{ url_for('static', filename='svg/edit.svg') }}"
+              class="option-image"
+          /></a>
+          <a
+            href="/delete-message/{{ message.id }}?redirect={{ selected_channel_name }}"
+            class="option-button"
+          >
+            <img
+              src="{{ url_for('static', filename='svg/close.svg') }}"
+              class="option-image"
+          /></a>
+          {% endif %}
+        </li>
+        {% endif %} {% endfor %} {% endif %}
+      </ol>
     </div>
     <div class="form-container">
       <form action="/channel/{{ selected_channel_name }}" method="POST">
-        <input type="text" name="content" placeholder="Start typing..." class="textbox" /><input type="image"
-          alt="Submit" value="Add Message" src="{{ url_for('static', filename='svg/send.svg') }}" />
+        <input
+          type="text"
+          name="content"
+          placeholder="Start typing..."
+          class="textbox"
+        /><input
+          type="image"
+          alt="Submit"
+          value="Add Message"
+          src="{{ url_for('static', filename='svg/send.svg') }}"
+        />
       </form>
     </div>
   </div>
