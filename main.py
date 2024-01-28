@@ -95,7 +95,10 @@ def channel_query():
 @app.route("/")
 def index():
     if current_user.is_authenticated:
-        return redirect("/channel")
+        # the "first" channel is arbitrary as the channels are currently unordered
+        # we just need to pick one to start on
+        first_channel = channel_query()[0]
+        return redirect("/channel/" + first_channel["name"])
     else:
         return render_template("/login.html")
 
@@ -159,13 +162,29 @@ def callback():
 
     login_user(user)
 
-    return redirect("/channel")
+    return redirect("/")
 
-@app.route("/channel/")
+@app.route("/channel/", methods=["POST"])
 @login_required
-def channel_index():
-    first_channel = channel_query()[0]
-    return redirect("/channel/" + first_channel["name"])
+def add_channel():
+    channel_name = request.form["channel-name"]
+
+    # don't recreate already existing channels
+    channels = channel_query()
+    channel_names = [channel["name"] for channel in channels]
+    if channel_name in channel_names:
+        return redirect("/channel/" + channel_name)
+
+    channel = datastore.Entity(db.key("channel"))
+    channel.update(
+        {
+            "name": channel_name,
+            "datetime_created": datetime.now(timezone.utc),
+        }
+    )
+    db.put(channel)
+
+    return redirect("/channel/" + channel_name)
 
 @app.route("/channel/<selected_channel_name>/", methods=["POST", "GET"])
 @login_required
@@ -251,49 +270,25 @@ def channel(selected_channel_name):
             selected_channel_name=selected_channel_name, 
             channels=channels, 
             messages=formatted_messages, 
-            current_user=current_user.id,
-            # user_first_name=current_user.first_name,
-            # user_last_name=current_user.last_name,
-            # user_profile_picture=current_user.profile_picture
+            current_user=current_user.id
         )
 
-@app.route("/add-channel", methods=["POST", "GET"])
-@login_required
-def add_channel():
-    if request.method == "POST":
-        channel_name = request.form["channel-name"]
-
-        # don't recreate already existing channels
-        channels = channel_query()
-        channel_names = [channel["name"] for channel in channels]
-        if channel_name in channel_names:
-            return redirect("/channel/" + channel_name)
-
-        channel = datastore.Entity(db.key("channel"))
-        channel.update(
-            {
-                "name": channel_name,
-                "datetime_created": datetime.now(timezone.utc),
-            }
-        )
-        db.put(channel)
-
-        return redirect("/channel/" + channel_name)
-    else:
-        return redirect("/")
-    
-@app.route("/delete-message/<int:id>")
-@login_required
-def delete_message(id):
-    db.delete(db.key("message", id))
-    redirect_channel = request.args.get("redirect")
-    return redirect("/channel/" + redirect_channel)
-
-@app.route("/delete-channel/<int:id>/")
+@app.route("/delete-channel/<int:id>")
 @login_required
 def delete_channel(id):
     db.delete(db.key("channel", id)) 
     return redirect("/")
+    
+@app.route("/delete-message/<int:id>")
+@login_required
+def delete_message(id):
+    message = db.get(db.key("message", id))
+    if message["author"] != current_user.id:
+        return "You do not have permission to delete this message.", 403
+    db.delete(db.key("message", id))
+
+    redirect_channel = request.args.get("redirect")
+    return redirect("/channel/" + redirect_channel)
 
 if __name__ == "__main__":
     context = ("ssl/server.crt", "ssl/server.key")
