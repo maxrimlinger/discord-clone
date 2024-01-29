@@ -99,14 +99,6 @@
           </div>
           {% if message.author_id == current_user %}
           <a
-            href="/edit-message/{{ message.id }}?redirect={{ selected_channel_name }}"
-            class="option-button"
-          >
-            <img
-              src="{{ url_for('static', filename='svg/edit.svg') }}"
-              class="option-image"
-          /></a>
-          <a
             href="/delete-message/{{ message.id }}?redirect={{ selected_channel_name }}"
             class="option-button"
           >
